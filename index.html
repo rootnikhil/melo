@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Melo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="logo">Melo</h2>
+    <nav>
+      <p>Home</p>
+      <p>Library</p>
+      <p>Favorites</p>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <h1>Discover</h1>
+    <div class="grid" id="songList"></div>
+  </main>
+
+</div>
+
+<!-- PLAYER -->
+<div class="player">
+  <div class="left">
+    <img id="cover" src="images/cover1.jpg">
+    <div>
+      <h4 id="title">Select a song</h4>
+      <p>Melo</p>
+    </div>
+  </div>
+
+  <div class="center">
+    <button onclick="prevSong()">⏮</button>
+    <button id="playBtn" onclick="togglePlay()">▶</button>
+    <button onclick="nextSong()">⏭</button>
+    <input type="range" id="progress">
+  </div>
+
+  <div class="right">
+    🔊 <input type="range" id="volume" min="0" max="1" step="0.01">
+  </div>
+</div>
+
+<audio id="audio"></audio>
+<script src="script.js"></script>
+
+</body>
+</html>
