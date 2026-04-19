@@ -2,59 +2,232 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Melo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-
+  <title>Melo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="bg-glow glow-one"></div>
+  <div class="bg-glow glow-two"></div>
 
-<div class="app">
+  <div class="app">
+    <aside class="sidebar">
+      <div>
+        <div class="brand-block">
+          <p class="eyebrow">Premium Music Platform</p>
+          <h1 class="logo">Melo</h1>
+          <p class="sidebar-copy">A premium music platform with favorites, recent plays, playlists, queue, and immersive playback.</p>
+        </div>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h2 class="logo">Melo</h2>
-    <nav>
-      <p>Home</p>
-      <p>Library</p>
-      <p>Favorites</p>
-    </nav>
-  </aside>
+        <nav class="nav">
+          <button class="nav-item active" data-section="home">Home</button>
+          <button class="nav-item" data-section="library">Library</button>
+          <button class="nav-item" data-section="favorites">Favorites</button>
+          <button class="nav-item" data-section="recent">Recent</button>
+        </nav>
 
-  <!-- MAIN CONTENT -->
-  <main class="main">
-    <h1>Discover</h1>
-    <div class="grid" id="songList"></div>
-  </main>
+        <div class="sidebar-panel">
+          <p class="eyebrow">Shortcuts</p>
+          <p><kbd>Space</kbd> Play or pause</p>
+          <p><kbd>Left</kbd> <kbd>Right</kbd> Seek</p>
+          <p><kbd>Up</kbd> <kbd>Down</kbd> Volume</p>
+          <p><kbd>F</kbd> Favorite current song</p>
+        </div>
+      </div>
 
-</div>
+      <div class="sidebar-panel mini-stats">
+        <div>
+          <span class="stat-label">Tracks</span>
+          <strong id="trackCount">0</strong>
+        </div>
+        <div>
+          <span class="stat-label">Favorites</span>
+          <strong id="favoriteCount">0</strong>
+        </div>
+        <div>
+          <span class="stat-label">Recent</span>
+          <strong id="recentCount">0</strong>
+        </div>
+      </div>
+    </aside>
 
-<!-- PLAYER -->
-<div class="player">
-  <div class="left">
-    <img id="cover" src="images/cover1.jpg">
-    <div>
-      <h4 id="title">Select a song</h4>
-      <p>Melo</p>
+    <main class="main">
+      <header class="top-bar">
+        <div>
+          <p class="eyebrow">Now Streaming</p>
+          <h2>Your premium music streaming platform</h2>
+        </div>
+
+        <div class="top-actions">
+          <input type="text" id="search" placeholder="Search songs..." class="search">
+          <button class="theme-btn" id="themeToggle" type="button">Theme</button>
+        </div>
+      </header>
+
+      <section class="discover-strip">
+        <div class="filter-row">
+          <button class="filter-chip active" type="button" data-filter="all">All</button>
+          <button class="filter-chip" type="button" data-filter="romance">Romance</button>
+          <button class="filter-chip" type="button" data-filter="energy">Energy</button>
+          <button class="filter-chip" type="button" data-filter="soft">Soft</button>
+          <button class="filter-chip" type="button" data-filter="soul">Soul</button>
+          <button class="filter-chip" type="button" data-filter="repeat">Repeat Picks</button>
+        </div>
+        <div class="discover-card">
+          <p class="eyebrow">Curated Mood</p>
+          <h3 id="discoverHeadline">Premium music for every moment.</h3>
+          <p id="discoverCopy">Explore your library, favorites, playlists, and nonstop playback in one place.</p>
+        </div>
+      </section>
+
+      <section class="hero" id="homeSection">
+        <div class="hero-content">
+          <img id="heroCover" src="images/cover1.jpg" alt="Current song cover">
+          <div class="hero-text">
+            <p class="tag">Now Playing</p>
+            <h1 id="heroTitle">Select a song</h1>
+            <p id="heroSubtitle">Stream your favorite music with a premium experience built for discovery, control, and nonstop listening.</p>
+
+            <div class="hero-actions">
+              <button class="hero-play" id="heroPlayBtn" type="button">Play</button>
+              <button class="hero-secondary" id="favoriteCurrentBtn" type="button">Favorite</button>
+            </div>
+
+            <div class="hero-info">
+              <div class="info-chip">
+                <span>Mode</span>
+                <strong id="playbackMode">Normal</strong>
+              </div>
+              <div class="info-chip">
+                <span>Status</span>
+                <strong id="playbackStatus">Paused</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard">
+        <div class="main-column">
+          <section class="section">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Made For You</p>
+                <h2>Featured Playlists</h2>
+              </div>
+            </div>
+            <div class="playlist-grid" id="playlistGrid"></div>
+          </section>
+
+          <section class="section" id="recentSection">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Your Flow</p>
+                <h2>Recently Played</h2>
+              </div>
+              <button class="clear-btn" id="clearRecentBtn" type="button">Clear</button>
+            </div>
+            <div class="horizontal" id="recentList"></div>
+          </section>
+
+          <section class="section" id="librarySection">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Collection</p>
+                <h2>All Songs</h2>
+              </div>
+              <span class="section-meta" id="resultCount">0 songs</span>
+            </div>
+            <div class="grid" id="songList"></div>
+          </section>
+        </div>
+
+        <aside class="side-column">
+          <section class="section player-panel">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Live Session</p>
+                <h2>Now Playing</h2>
+              </div>
+            </div>
+
+            <div class="current-song-box">
+              <img id="sideCover" src="images/cover1.jpg" alt="Current song cover">
+              <div>
+                <h3 id="sideTitle">Select a song</h3>
+                <p id="sideArtist">Melo Originals</p>
+              </div>
+            </div>
+
+            <canvas id="visualizer" width="320" height="82"></canvas>
+
+            <div class="queue-box">
+              <p class="eyebrow">Up Next</p>
+              <div id="queueList"></div>
+            </div>
+          </section>
+
+          <section class="section" id="favoritesSection">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Loved Tracks</p>
+                <h2>Favorites</h2>
+              </div>
+            </div>
+            <div class="grid compact-grid" id="favoritesList"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Collection View</p>
+                <h2>Albums And Vibes</h2>
+              </div>
+            </div>
+            <div class="album-list" id="albumList"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="player">
+    <div class="left">
+      <img id="cover" src="images/cover1.jpg" alt="Current song cover">
+      <div>
+        <h4 id="title">Select a song</h4>
+        <p class="artist" id="artistLabel">Melo Originals</p>
+      </div>
+    </div>
+
+    <div class="center">
+      <div class="controls">
+        <button id="shuffleBtn" type="button" title="Shuffle">Shuffle</button>
+        <button id="prevBtn" type="button" title="Previous">Prev</button>
+        <button id="playBtn" type="button" title="Play">Play</button>
+        <button id="nextBtn" type="button" title="Next">Next</button>
+        <button id="repeatBtn" type="button" title="Repeat">Repeat</button>
+        <button id="muteBtn" type="button" title="Mute">Mute</button>
+      </div>
+
+      <div class="time">
+        <span id="currentTime">0:00</span>
+        <input type="range" id="progress" value="0" min="0" max="100">
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+
+    <div class="right">
+      <span>Volume</span>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
     </div>
   </div>
 
-  <div class="center">
-    <button onclick="prevSong()">⏮</button>
-    <button id="playBtn" onclick="togglePlay()">▶</button>
-    <button onclick="nextSong()">⏭</button>
-    <input type="range" id="progress">
-  </div>
-
-  <div class="right">
-    🔊 <input type="range" id="volume" min="0" max="1" step="0.01">
-  </div>
-</div>
-
-<audio id="audio"></audio>
-<script src="script.js"></script>
-
+  <audio id="audio"></audio>
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
 </body>
 </html>
