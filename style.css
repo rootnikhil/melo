@@ -885,7 +885,7 @@ body.light .player {
   }
 
   .main {
-    padding-bottom: 140px;
+    padding-bottom: 180px;
   }
 
   .top-bar,
@@ -894,6 +894,23 @@ body.light .player {
   .player {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .top-actions {
+    width: 100%;
+  }
+
+  .theme-btn,
+  .search {
+    width: 100%;
+  }
+
+  .nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mini-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .hero img {
@@ -910,6 +927,33 @@ body.light .player {
   .right {
     min-width: 0;
   }
+
+  .right {
+    justify-content: space-between;
+  }
+
+  .player {
+    gap: 12px;
+    padding: 14px 18px calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .controls {
+    flex-wrap: wrap;
+  }
+
+  .controls button {
+    flex: 1 1 calc(33.333% - 10px);
+    min-width: 92px;
+  }
+
+  .time {
+    width: 100%;
+  }
+
+  .side-column,
+  .main-column {
+    width: 100%;
+  }
 }
 
 @media (max-width: 640px) {
@@ -924,6 +968,14 @@ body.light .player {
     border-radius: 22px;
   }
 
+  .sidebar {
+    padding-bottom: 14px;
+  }
+
+  .brand-block {
+    margin-bottom: 18px;
+  }
+
   .search {
     width: 100%;
   }
@@ -932,5 +984,196 @@ body.light .player {
   .horizontal,
   .playlist-grid {
     grid-template-columns: 1fr;
+  }
+
+  .top-bar {
+    margin-bottom: 16px;
+  }
+
+  .top-bar h2 {
+    font-size: 1.6rem;
+  }
+
+  .discover-strip {
+    margin-bottom: 18px;
+  }
+
+  .filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .filter-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-chip {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .hero-content {
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .hero img {
+    max-width: 180px;
+    border-radius: 18px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  #heroSubtitle {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .hero-actions,
+  .hero-info {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-play,
+  .hero-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .section {
+    margin-bottom: 16px;
+  }
+
+  .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .playlist-card,
+  .album-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .playlist-meta,
+  .album-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .current-song-box {
+    gap: 12px;
+  }
+
+  .current-song-box img {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+
+  .queue-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .queue-item .pill-btn {
+    width: 100%;
+  }
+
+  .player {
+    border-radius: 18px 18px 0 0;
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .left {
+    gap: 10px;
+  }
+
+  .left img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .left h4 {
+    font-size: 0.95rem;
+  }
+
+  .artist {
+    font-size: 0.82rem;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .controls button {
+    min-width: 0;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.88rem;
+  }
+
+  .time {
+    gap: 8px;
+    font-size: 0.82rem;
+  }
+
+  .right {
+    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .right span {
+    font-size: 0.82rem;
+  }
+
+  .toast {
+    right: 12px;
+    left: 12px;
+    bottom: 150px;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .main,
+  .sidebar {
+    padding: 14px;
+  }
+
+  .nav {
+    grid-template-columns: 1fr;
+  }
+
+  .mini-stats {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .hero,
+  .section {
+    padding: 14px;
+  }
+
+  .hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .discover-card h3,
+  .section-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
