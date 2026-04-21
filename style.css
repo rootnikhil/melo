@@ -99,11 +99,8 @@ body::after {
 .phone-frame {
   width: 100%;
   max-width: 400px;
-
-  height: min(820px, calc(100dvh - 32px)); /* ✅ FIXED */
-
+  height: min(820px, calc(100dvh - 32px));
   transform-origin: top center;
-
   background: var(--bg-secondary);
   border-radius: 40px;
   overflow: hidden;
