@@ -617,21 +617,3 @@ function init() {
 }
 
 init();
-
-function fitApp() {
-  const frame = document.querySelector('.phone-frame');
-
-  if (!frame) return;
-
-  const screenHeight = window.innerHeight;
-  const designHeight = 820;
-
-  let scale = screenHeight / designHeight;
-
-  if (scale > 1) scale = 1;
-
-  frame.style.transform = `scale(${scale})`;
-}
-
-window.addEventListener('load', fitApp);
-window.addEventListener('resize', fitApp);
