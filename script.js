@@ -79,6 +79,14 @@ const SONGS = [
     cover: "images/cover10.jpg",
     src: "audio/song10.mp3",
   },
+  {
+    id: 11,
+    title: "Babydoll",
+    artist: "Dominic Fike",
+    duration: "1:35",
+    cover: "images/cover11.jpg",
+    src: "audio/song11.mp3",
+  },
 ];
 
 const state = {
