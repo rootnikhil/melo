@@ -14,7 +14,7 @@
 <div class="phone-frame no-select">
 
   <div class="topbar">
-    <div class="app-logo">M<span>elo</span></div>
+    <div class="app-logo" id="meloLogo" title="About Melo">M<span>elo</span></div>
     <div class="topbar-actions">
       <button class="icon-btn" id="themeToggle" title="Toggle theme">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon">
@@ -31,12 +31,7 @@
     </div>
   </div>
 
-  <div class="tab-nav">
-    <button class="tab-btn active" data-tab="player">Now Playing</button>
-    <button class="tab-btn" data-tab="songs">Library</button>
-    <button class="tab-btn" data-tab="liked">Liked</button>
-    <button class="tab-btn" data-tab="recent">Recent</button>
-  </div>
+  <div class="tab-nav" id="tabNav"></div>
 
   <div class="screen">
     <div class="view active" id="view-player">
@@ -126,7 +121,19 @@
       </div>
       <div class="song-list" id="recentList"></div>
     </div>
+
+    <div class="view" id="view-playlist">
+      <div class="list-header">
+        <div class="list-header-top">
+          <div class="list-section-title">Playlists</div>
+          <div class="list-count">0</div>
+        </div>
+      </div>
+      <div class="song-list">Coming soon...</div>
+    </div>
+    
   </div>
+    
 
   <div class="mini-player" id="miniPlayer">
     <div class="mp-thumb"><img id="mpImg" src="" alt=""></div>
@@ -139,6 +146,77 @@
     </button>
   </div>
 
+  <!-- ── ABOUT PANEL (slides up inside the frame) ── -->
+  <div class="about-panel" id="aboutPanel">
+    <div class="about-inner">
+
+      <button class="about-close" id="aboutClose" title="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="about-hero">
+        <div class="about-logo-big">M<span>elo</span></div>
+        <div class="about-version">Version 1.0.0</div>
+        <p class="about-tagline">Where every beat finds its moment.</p>
+      </div>
+
+      <div class="about-divider"></div>
+
+      <div class="about-section">
+        <div class="about-section-label">About the App</div>
+        <p class="about-text">
+          Melo is a lightweight, beautifully crafted music player built entirely with vanilla HTML, CSS, and JavaScript — no frameworks, no dependencies, just pure web technology. It was designed to feel native, load instantly, and get out of your way while the music plays.
+        </p>
+        <p class="about-text">
+          Features include a spinning CD player, smart search, liked songs, recently played history, shuffle &amp; repeat modes, persistent volume and theme preferences, and a seamless mini player for when you're browsing your library.
+        </p>
+      </div>
+
+      <div class="about-divider"></div>
+
+      <div class="about-section">
+        <div class="about-section-label">Built By</div>
+        <div class="about-dev-card">
+          <div class="about-dev-avatar">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div class="about-dev-info">
+            <div class="about-dev-name">rootnikhil</div>
+            <div class="about-dev-bio">A tech &amp; coding enthusiast passionate about crafting clean, fast, and delightful web experiences. Specialises in frontend development, UI/UX design, and building things that just work — beautifully.</div>
+          </div>
+        </div>
+
+        <div class="about-stack">
+          <div class="about-stack-label">Built with</div>
+          <div class="about-tags">
+            <span class="about-tag">HTML5</span>
+            <span class="about-tag">CSS3</span>
+            <span class="about-tag">Vanilla JS</span>
+            <span class="about-tag">Web Audio API</span>
+            <span class="about-tag">LocalStorage</span>
+            <span class="about-tag">CSS Variables</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-divider"></div>
+
+      <div class="about-footer">
+        <div class="about-copyright">
+          © <span id="aboutYear"></span> Melo. All rights reserved.
+        </div>
+        <div class="about-rights">
+          Melo and its design are original works. Unauthorised reproduction, redistribution, or modification of this application or its source code is prohibited without prior written permission from the developer.
+        </div>
+        <div class="about-made">
+          Made with <span class="about-heart">♥</span> for music lovers.
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- ── END ABOUT PANEL ── -->
+
 </div>
 </div>
 
@@ -149,9 +227,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
-
 <audio id="audioPlayer"></audio>
-
 <script src="script.js"></script>
 </body>
 </html>
