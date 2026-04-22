@@ -25,6 +25,7 @@ const state = {
   isPlaying: false,
   shuffle: false,
   recentAddedForCurrent: false,
+  hasLoadedSong: false,
   repeat: false,
   repeatMode: "off",
   volume: 0.8,
@@ -104,6 +105,7 @@ function loadSong(index, autoplay = false) {
   const song = SONGS[index];
   state.currentIndex = index;
   state.recentAddedForCurrent = false;
+  state.hasLoadedSong = true;
   audio.src = song.src;
   audio.volume = state.volume;
 
@@ -147,7 +149,16 @@ function pauseSong() {
 }
 
 function togglePlay() {
-  if (state.isPlaying) { pauseSong(); } else { playSong(); }
+  if (!state.hasLoadedSong) {
+    loadSong(0, true); // 👈 load first song and play
+    return;
+  }
+
+  if (state.isPlaying) {
+    pauseSong();
+  } else {
+    playSong();
+  }
 }
 
 function nextSong() {
