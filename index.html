@@ -1,233 +1,448 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Melo - Music Player</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  >
+  <title>Melo - Music Player</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="app">
+    <div class="phone-frame no-select">
 
-<div id="app">
-<div class="phone-frame no-select">
+      <div class="topbar">
+        <div class="app-logo" id="meloLogo" title="About Melo">M<span>elo</span></div>
 
-  <div class="topbar">
-    <div class="app-logo" id="meloLogo" title="About Melo">M<span>elo</span></div>
-    <div class="topbar-actions">
-      <button class="icon-btn" id="themeToggle" title="Toggle theme">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon">
-          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-      </button>
-    </div>
-  </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="sleepTimerBtn" title="Sleep Timer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </button>
 
-  <div class="search-wrap">
-    <div class="search-input-wrap">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="searchInput" placeholder="Search songs, artists..." autocomplete="off">
-    </div>
-  </div>
-
-  <div class="tab-nav" id="tabNav"></div>
-
-  <div class="screen">
-    <div class="view active" id="view-player">
-      <div class="cd-stage">
-        <div class="disc" id="disc"></div>
-        <div class="album-cover" id="albumCover">
-          <img id="albumImg" src="images/default.png" alt="Album Art">
+          <button class="icon-btn" id="themeToggle" title="Toggle theme">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      <div class="song-meta">
-        <div class="song-title" id="songTitle">Select a Song</div>
-        <div class="song-artist" id="songArtist">Melo Music</div>
-      </div>
+      <div class="search-wrap">
+        <div class="search-input-wrap">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
 
-      <div class="song-actions-row">
-        <button class="like-btn" id="playerLikeBtn" title="Like">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </button>
-        <div style="flex:1"></div>
-        <button class="more-btn" id="playerMoreBtn" title="More">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-        </button>
-      </div>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search songs, artists..."
+            autocomplete="off"
+          >
 
-      <div class="progress-wrap">
-        <div class="progress-bar-track" id="progressTrack">
-          <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-        </div>
-        <div class="time-row">
-          <span id="currentTime">0:00</span>
-          <span id="totalTime">0:00</span>
+          <button class="search-clear-btn" id="searchClearBtn" aria-label="Clear">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      <div class="controls">
-        <button class="ctrl-btn" id="shuffleBtn" title="Shuffle">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-        </button>
-        <button class="ctrl-btn" id="prevBtn" title="Previous">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
-        </button>
-        <button class="ctrl-btn play-btn" id="playBtn" title="Play/Pause">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-        <button class="ctrl-btn" id="nextBtn" title="Next">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z"/></svg>
-        </button>
-        <button class="ctrl-btn" id="repeatBtn" title="Repeat">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-        </button>
-      </div>
+      <div class="tab-nav" id="tabNav"></div>
 
-      <div class="volume-row">
-        <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
-        <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80">
-        <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-      </div>
-    </div>
+      <div class="screen">
 
-    <div class="view" id="view-songs">
-      <div class="list-header">
-        <div class="list-header-top">
-          <div class="list-section-title">All Songs</div>
-          <div class="list-count" id="songsCount"></div>
-        </div>
-      </div>
-      <div class="song-list" id="songList"></div>
-    </div>
+        <div class="view active" id="view-player">
+          <div class="cd-stage" id="cdStage">
+            <div class="buffering-ring" id="bufferingRing"></div>
+            <div class="disc" id="disc"></div>
 
-    <div class="view" id="view-liked">
-      <div class="list-header">
-        <div class="list-header-top">
-          <div class="list-section-title">❤️ Liked Songs</div>
-          <div class="list-count" id="likedCount"></div>
-        </div>
-      </div>
-      <div class="song-list" id="likedList"></div>
-    </div>
-
-    <div class="view" id="view-recent">
-      <div class="list-header">
-        <div class="list-header-top">
-          <div class="list-section-title">Recently Played</div>
-          <div class="list-count" id="recentCount"></div>
-        </div>
-      </div>
-      <div class="song-list" id="recentList"></div>
-    </div>
-
-    <div class="view" id="view-playlist">
-      <div class="list-header">
-        <div class="list-header-top">
-          <div class="list-section-title">Playlists</div>
-          <div class="list-count">0</div>
-        </div>
-      </div>
-      <div class="song-list">Coming soon...</div>
-    </div>
-    
-  </div>
-    
-
-  <div class="mini-player" id="miniPlayer">
-    <div class="mp-thumb"><img id="mpImg" src="images/default.png" alt=""></div>
-    <div class="mp-info">
-      <div class="mp-title" id="mpTitle">-</div>
-      <div class="mp-artist" id="mpArtist">-</div>
-    </div>
-    <button class="mp-ctrl-btn" id="mpPlayBtn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" id="mpIcon"><path d="M8 5v14l11-7z"/></svg>
-    </button>
-  </div>
-
-  <!-- ── ABOUT PANEL (slides up inside the frame) ── -->
-  <div class="about-panel" id="aboutPanel">
-    <div class="about-inner">
-
-      <button class="about-close" id="aboutClose" title="Close">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-
-      <div class="about-hero">
-        <div class="about-logo-big">M<span>elo</span></div>
-        <div class="about-version">Version 1.0.0</div>
-        <p class="about-tagline">Where every beat finds its moment.</p>
-      </div>
-
-      <div class="about-divider"></div>
-
-      <div class="about-section">
-        <div class="about-section-label">About the App</div>
-        <p class="about-text">
-          Melo is a lightweight, beautifully crafted music player built entirely with vanilla HTML, CSS, and JavaScript — no frameworks, no dependencies, just pure web technology. It was designed to feel native, load instantly, and get out of your way while the music plays.
-        </p>
-        <p class="about-text">
-          Features include a spinning CD player, smart search, liked songs, recently played history, shuffle &amp; repeat modes, persistent volume and theme preferences, and a seamless mini player for when you're browsing your library.
-        </p>
-      </div>
-
-      <div class="about-divider"></div>
-
-      <div class="about-section">
-        <div class="about-section-label">Built By</div>
-        <div class="about-dev-card">
-          <div class="about-dev-avatar">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <div class="album-cover" id="albumCover">
+              <img id="albumImg" src="images/default.png" alt="Album Art">
+            </div>
           </div>
-          <div class="about-dev-info">
-            <div class="about-dev-name">rootnikhil</div>
-            <div class="about-dev-bio">A tech &amp; coding enthusiast passionate about crafting clean, fast, and delightful web experiences. Specialises in frontend development, UI/UX design, and building things that just work — beautifully.</div>
+
+          <div class="song-meta">
+            <div class="song-title-wrap">
+              <div class="song-title" id="songTitle">Select a Song</div>
+            </div>
+            <div class="song-artist" id="songArtist">Melo Music</div>
+            <div class="song-context-label" id="songContextLabel">Play from library or playlist</div>
+          </div>
+
+          <div class="song-actions-row">
+            <button class="like-btn" id="playerLikeBtn" title="Like">
+              <div class="burst"></div>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            </button>
+
+            <button class="action-pill" id="speedBtn" title="Speed">1×</button>
+
+            <button class="more-btn" id="playerMoreBtn" title="More">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="5" r="1" />
+                <circle cx="12" cy="12" r="1" />
+                <circle cx="12" cy="19" r="1" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-bar-track" id="progressTrack">
+              <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+
+            <div class="time-row">
+              <span id="currentTime">0:00</span>
+              <span id="totalTime">0:00</span>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="ctrl-btn" id="shuffleBtn" title="Shuffle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 3 21 3 21 8" />
+                <line x1="4" y1="20" x2="21" y2="3" />
+                <polyline points="21 16 21 21 16 21" />
+                <line x1="15" y1="15" x2="21" y2="21" />
+              </svg>
+            </button>
+
+            <button class="ctrl-btn" id="prevBtn" title="Previous">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+              </svg>
+            </button>
+
+            <button class="ctrl-btn play-btn" id="playBtn" title="Play/Pause">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" id="playIcon">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+
+            <button class="ctrl-btn" id="nextBtn" title="Next">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z" />
+              </svg>
+            </button>
+
+            <button class="ctrl-btn" id="repeatBtn" title="Repeat">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="repeatIcon">
+                <polyline points="17 1 21 5 17 9" />
+                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                <polyline points="7 23 3 19 7 15" />
+                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="volume-row">
+            <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            </svg>
+
+            <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80">
+
+            <svg class="vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+          </div>
+
+          <button class="queue-toggle-btn" id="queueToggleBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+            Up Next
+          </button>
+
+          <div class="queue-drawer" id="queueDrawer">
+            <div class="queue-inner" id="queueInner"></div>
           </div>
         </div>
 
-        <div class="about-stack">
-          <div class="about-stack-label">Built with</div>
-          <div class="about-tags">
-            <span class="about-tag">HTML5</span>
-            <span class="about-tag">CSS3</span>
-            <span class="about-tag">Vanilla JS</span>
-            <span class="about-tag">Web Audio API</span>
-            <span class="about-tag">LocalStorage</span>
-            <span class="about-tag">CSS Variables</span>
+        <div class="view" id="view-songs">
+          <div class="list-header">
+            <div class="list-header-top">
+              <div class="list-section-title">All Songs</div>
+              <div class="list-count" id="songsCount"></div>
+            </div>
+          </div>
+          <div class="song-list" id="songList"></div>
+        </div>
+
+        <div class="view" id="view-liked">
+          <div class="list-header">
+            <div class="list-header-top">
+              <div class="list-section-title">Liked Songs</div>
+              <div class="list-count" id="likedCount"></div>
+            </div>
+          </div>
+          <div class="song-list" id="likedList"></div>
+        </div>
+
+        <div class="view" id="view-recent">
+          <div class="list-header">
+            <div class="list-header-top">
+              <div class="list-section-title">Recently Played</div>
+              <div class="list-count" id="recentCount"></div>
+            </div>
+          </div>
+          <div class="song-list" id="recentList"></div>
+        </div>
+
+        <div class="view" id="view-search">
+          <div class="song-list" id="searchResultsList"></div>
+        </div>
+
+        <div class="view" id="view-playlist">
+          <div class="list-header">
+            <div class="list-header-top">
+              <div class="list-section-title">Playlists</div>
+              <div class="list-count" id="playlistCount"></div>
+            </div>
+          </div>
+
+          <div class="playlist-shell">
+            <div class="playlist-create-card">
+              <div class="playlist-create-title">Create your own playlist</div>
+              <p class="playlist-create-subtitle">
+                Make a playlist, add the songs you want, and play only that collection.
+              </p>
+
+              <div class="playlist-create-row">
+                <input type="text" id="playlistNameInput" class="playlist-input" placeholder="Playlist name">
+                <button class="playlist-primary-btn" id="createPlaylistBtn">Create</button>
+              </div>
+            </div>
+
+            <div class="playlist-list" id="playlistList"></div>
+            <div class="playlist-detail" id="playlistDetail"></div>
           </div>
         </div>
       </div>
 
-      <div class="about-divider"></div>
+      <div class="mini-player" id="miniPlayer">
+        <div class="mini-player-main">
+          <div class="mp-thumb">
+            <img id="mpImg" src="images/default.png" alt="">
+          </div>
 
-      <div class="about-footer">
-        <div class="about-copyright">
-          © <span id="aboutYear"></span> Melo. All rights reserved.
+          <div class="mp-info">
+            <div class="mp-title" id="mpTitle">-</div>
+            <div class="mp-artist" id="mpArtist">-</div>
+          </div>
+
+          <div class="mini-controls">
+            <button class="mp-ctrl-btn" id="mpPrevBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+              </svg>
+            </button>
+
+            <button class="mp-ctrl-btn mp-play-btn" id="mpPlayBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" id="mpIcon">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+
+            <button class="mp-ctrl-btn" id="mpNextBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z" />
+              </svg>
+            </button>
+          </div>
         </div>
-        <div class="about-rights">
-          Melo and its design are original works. Unauthorised reproduction, redistribution, or modification of this application or its source code is prohibited without prior written permission from the developer.
-        </div>
-        <div class="about-made">
-          Made with <span class="about-heart">♥</span> for music lovers.
+
+        <div class="mini-progress">
+          <div class="mini-progress-fill" id="miniProgressFill" style="width:0%"></div>
         </div>
       </div>
 
+      <div class="kbd-hint">Space · ←→ seek · Shift+←→ skip · ↑↓ vol · L like · M mute · F search</div>
+
+      <div class="bottom-sheet-overlay" id="sleepOverlay"></div>
+      <div class="bottom-sheet" id="sleepPanel">
+        <div class="sheet-handle"></div>
+
+        <div class="sheet-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Sleep Timer
+        </div>
+
+        <div class="sleep-countdown" id="sleepCountdown"></div>
+
+        <div class="sheet-grid">
+          <button class="sheet-opt" data-min="5">5 min</button>
+          <button class="sheet-opt" data-min="10">10 min</button>
+          <button class="sheet-opt" data-min="15">15 min</button>
+          <button class="sheet-opt" data-min="30">30 min</button>
+          <button class="sheet-opt" data-min="45">45 min</button>
+          <button class="sheet-opt" data-min="60">1 hour</button>
+        </div>
+
+        <button class="sheet-cancel-btn" id="sleepCancelBtn">Cancel Timer</button>
+      </div>
+
+      <div class="bottom-sheet-overlay" id="speedOverlay"></div>
+      <div class="bottom-sheet" id="speedPanel">
+        <div class="sheet-handle"></div>
+
+        <div class="sheet-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12" />
+            <polyline points="12 12 15.5 9.5" />
+          </svg>
+          Playback Speed
+        </div>
+
+        <div class="sheet-grid">
+          <button class="sheet-opt" data-speed="0.5">0.5×</button>
+          <button class="sheet-opt" data-speed="0.75">0.75×</button>
+          <button class="sheet-opt sheet-opt-active" data-speed="1">Normal</button>
+          <button class="sheet-opt" data-speed="1.25">1.25×</button>
+          <button class="sheet-opt" data-speed="1.5">1.5×</button>
+          <button class="sheet-opt" data-speed="2">2×</button>
+        </div>
+      </div>
+
+      <div class="bottom-sheet-overlay" id="playlistOverlay"></div>
+      <div class="bottom-sheet" id="playlistPanel">
+        <div class="sheet-handle"></div>
+
+        <div class="sheet-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+          </svg>
+          Add To Playlist
+        </div>
+
+        <p class="sheet-helper" id="playlistSheetHelper">Choose a playlist for this song.</p>
+        <div class="playlist-sheet-list" id="playlistSheetList"></div>
+      </div>
+
+      <div class="about-panel" id="aboutPanel">
+        <div class="about-inner">
+          <button class="about-close" id="aboutClose">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
+          <div class="about-hero">
+            <div class="about-logo-big">M<span>elo</span></div>
+            <div class="about-version">Version 2.1.0</div>
+            <p class="about-tagline">Where every beat finds its moment.</p>
+          </div>
+
+          <div class="about-divider"></div>
+
+          <div class="about-section">
+            <div class="about-section-label">About the App</div>
+            <p class="about-text">
+              Melo is a lightweight music player built with vanilla HTML, CSS, and JavaScript for a fast and focused listening experience.
+            </p>
+            <p class="about-text">
+              Features: spinning CD, sleep timer, speed control, grouped search, keyboard shortcuts, liked songs, recently played, playlists, shuffle and repeat, mini player with progress, and theme support.
+            </p>
+          </div>
+
+          <div class="about-divider"></div>
+
+          <div class="about-section">
+            <div class="about-section-label">Built By</div>
+
+            <div class="about-dev-card">
+              <div class="about-dev-avatar">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                </svg>
+              </div>
+
+              <div class="about-dev-info">
+                <div class="about-dev-name">rootnikhil</div>
+                <div class="about-dev-bio">
+                  A tech and coding enthusiast passionate about crafting clean, fast, and delightful web experiences with strong frontend polish.
+                </div>
+              </div>
+            </div>
+
+            <div class="about-stack">
+              <div class="about-stack-label">Built with</div>
+
+              <div class="about-tags">
+                <span class="about-tag">HTML5</span>
+                <span class="about-tag">CSS3</span>
+                <span class="about-tag">Vanilla JS</span>
+                <span class="about-tag">Web Audio</span>
+                <span class="about-tag">LocalStorage</span>
+                <span class="about-tag">Responsive UI</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-divider"></div>
+
+          <div class="about-footer">
+            <div class="about-copyright">© <span id="aboutYear"></span> Melo. All rights reserved.</div>
+            <div class="about-rights">
+              Melo and its design are original works. Unauthorised reproduction, redistribution, or modification is prohibited without prior written permission from the developer.
+            </div>
+            <div class="about-made">Made with <span class="about-heart">♥</span> for music lovers.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="center-notice" id="sleepNotice">
+        <div class="center-notice-card">
+          <div class="center-notice-title">Time completed</div>
+          <div class="center-notice-text" id="sleepNoticeText">Go to sleep, your timer is completed.</div>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- ── END ABOUT PANEL ── -->
 
-</div>
-</div>
+  <div class="ctx-menu" id="ctxMenu">
+    <div class="ctx-item" id="ctxPlayNext"><span>⏭️</span> Play Next</div>
+    <div class="ctx-item" id="ctxAddToPlaylist"><span>🎵</span> Add to Playlist</div>
+    <div class="ctx-item" id="ctxDownload"><span>⬇️</span> Download</div>
+  </div>
 
-<div class="ctx-menu" id="ctxMenu">
-  <div class="ctx-item" id="ctxLike"><span>❤️</span> Like</div>
-  <div class="ctx-item" id="ctxSave"><span>📌</span> Save</div>
-  <div class="ctx-item" id="ctxDownload"><span>⬇️</span> Download</div>
-</div>
+  <div class="toast" id="toast"></div>
+  <audio id="audioPlayer" preload="metadata"></audio>
 
-<div class="toast" id="toast"></div>
-<audio id="audioPlayer"></audio>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
