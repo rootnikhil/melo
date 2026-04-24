@@ -1305,7 +1305,7 @@ function playPlaylist(playlistId) {
   }
 
   state.selectedPlaylistId = playlist.id;
-  updatePlaybackContextLabel();
+  usePlaylistQueue(playlist);
   loadSong(SONGS.findIndex((song) => song.id === playlist.songIds[0]), true);
   _savePersist();
   renderPlaylists();
