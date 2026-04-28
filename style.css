@@ -915,26 +915,28 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
 }
 
 .progress-fill {
+  position: absolute; /* 🔥 KEY FIX */
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  
   height: 3px;
   border-radius: 3px;
   background: linear-gradient(90deg, var(--amber) 0%, var(--amber-light) 100%);
-  position: absolute;
-  left: 0; top: 50%;
-  transform: translateY(-50%);
-  transition: width 0.22s linear;
+  
   pointer-events: none;
   box-shadow: 0 0 6px rgba(232,160,32,0.38);
 }
 
 .progress-thumb {
   position: absolute;
+  right: 0;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(50%, -50%);
   width: 12px; height: 12px;
   border-radius: 50%;
   background: var(--amber);
   box-shadow: 0 0 0 3px var(--amber-glow), 0 2px 7px rgba(0,0,0,0.55);
-  left: 0;
   opacity: 0;
   transition: opacity 0.2s, transform 0.15s;
   pointer-events: none;
