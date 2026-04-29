@@ -6,7 +6,7 @@
    2.  App state
    3.  DOM references
    4.  Helper functions
-   5.  Tonearm (drag system)
+   5.  Tonearm (drag system + groove sweep)
    6.  Playback core
    7.  Queue logic
    8.  UI update functions
@@ -42,6 +42,20 @@ const SONGS = [
   { id:9,  title:"Do Pal",                  artist:"Madan Mohan, Lata Mangeshkar, Sonu Nigam, Javed Akhtar",  cover:"images/cover9.jpg",  src:"audio/song9.mp3"  },
   { id:10, title:"Maand",                   artist:"Bayaan, Hasan Raheem, Rovalio",                            cover:"images/cover10.jpg", src:"audio/song10.mp3" },
   { id:11, title:"Babydoll",                artist:"Dominic Fike",                                             cover:"images/cover11.jpg", src:"audio/song11.mp3" },
+  { id:12, title:"Dhurandhar the Revenge - Aari Aari",                artist:"Bombay Rockers,Shashwat Sachdev,Khan Saab,Jasmine Sandlas,Sudhir Yaduvanshi",                                             cover:"images/cover7.jpg", src:"audio/song12.mp3" },
+  { id:13, title:"Main Aur Tu",                artist:"Jasmine Sandlas, Reble, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song13.mp3" },
+  { id:14, title:"Jaan Se Guzarte Hain",                artist:"Khan Saab, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song14.mp3" },
+  { id:15, title:"Aakhri Ishq ",                artist:"Jubin Nautiyal",                                             cover:"images/cover7.jpg", src:"audio/song15.mp3" },
+  { id:16, title:"Wild Ride",                artist:"Ellisar, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song16.mp3" },
+  { id:17, title:"Phir Se",                artist:"Arijit Singh",                                             cover:"images/cover7.jpg", src:"audio/song17.mp3" },
+  { id:18, title:"Didi (Sher-E-Baloch)",                artist:"Nabil El Houri, Shashwat Sachdev, Sons of Yusuf",                                             cover:"images/cover7.jpg", src:"audio/song18.mp3" },
+  { id:19, title:"Destiny - Mann Atkeya",                artist:"Vaibhav Gupta, Shahzad Ali, Token, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song19.mp3" },
+  { id:20, title:"Rang De Lal (Oye Oye)",                artist:"Jasmine Sandlas, Afsana Khan, Amit Kumar, Reble, Sapna Mukherjee",                                             cover:"images/cover7.jpg", src:"audio/song20.mp3" },
+  { id:21, title:"Jaiye Sajana",                artist:"Jasmine Sandlas, Satinder Sartaaj",                                             cover:"images/cover7.jpg", src:"audio/song21.mp3" },
+  { id:22, title:"Tere Ishq Ne",                artist:"Jyoti Nooran",                                             cover:"images/cover7.jpg", src:"audio/song22.mp3" },
+  { id:23, title:"Hum Pyaar Karne Wale",                artist:"Anuradha Paudwal, Udit Narayan, Qveen Herby",                                             cover:"images/cover7.jpg", src:"audio/song23.mp3" },
+  { id:24, title:"Kanhaiyya",                artist:"Jubin Nautiyal",                                             cover:"images/cover7.jpg", src:"audio/song24.mp3" },
+  
 ];
 
 const TABS = [
@@ -54,23 +68,39 @@ const TABS = [
 
 const ALL_SONG_IDS = SONGS.map(s => s.id);
 
-// Repeat mode cycle
 const REPEAT_MODES  = ["off", "all", "one"];
 const REPEAT_LABELS = { off: "Repeat Off", all: "Repeat All", one: "Repeat One" };
 
-// Tonearm angles (degrees from pivot)
-const ARM_REST   =  60;  // parked position
-const ARM_PLAY   = 100;  // on-vinyl start
-const ARM_MAX    = 132;  // furthest cue
-const ARM_THRESH =  84;  // threshold where needle touches vinyl
-const ARM_DELAY  = 150;  // ms before playback starts after needle drop
+/* ─────────────────────────────────────────────────────
+   GLOBAL PLAYLISTS — read-only, not stored in localStorage
+───────────────────────────────────────────────────── */
+const GLOBAL_PLAYLISTS = [
+  { id: "g-dhurandhar-1",   name: "Dhurandhar the Revenge",   songIds: [12 ,13 ,14 ,15 ,16 ,7 ,17 ,18 ,19 ,20 ,21 ,22 ,23 ,24 ]  },
+  
+];
+
+function isGlobalPlaylist(id) {
+  return typeof id === "string" && id.startsWith("g-");
+}
+
+function getAllPlaylists() {
+  return [...GLOBAL_PLAYLISTS, ...state.playlists];
+}
+
+/* ─────────────────────────────────────────────────────
+   TONEARM ANGLE CONSTANTS
+───────────────────────────────────────────────────── */
+const ARM_REST   =  60;
+const ARM_PLAY   =  95;
+const ARM_MAX    = 128;
+const ARM_THRESH =  80;
+const ARM_DELAY  = 150;
 
 
 /* ─────────────────────────────────────────────────────
    2. APP STATE
 ───────────────────────────────────────────────────── */
 const state = {
-  // Playback
   currentIndex:           0,
   isPlaying:              false,
   hasLoadedSong:          false,
@@ -80,26 +110,22 @@ const state = {
   volume:                 0.8,
   playbackSpeed:          1,
 
-  // Queues
   currentQueueSongIds:    [...ALL_SONG_IDS],
-  currentQueueType:       "all",        // "all" | "playlist"
+  currentQueueType:       "all",
   currentQueueLabel:      "All Songs",
   currentQueuePlaylistId: null,
-  playNextQueue:          [],           // songs queued to play next
+  playNextQueue:          [],
 
-  // Data
   liked:                  new Set(),
   recentlyPlayed:         [],
-  playlists:              [],
+  playlists:              [],          // user playlists only — globals never go here
   selectedPlaylistId:     null,
 
-  // UI
   activeTab:              "player",
   ctxSongId:              null,
   searchQuery:            "",
   queueOpen:              false,
 
-  // Sleep timer
   sleepTimer:             null,
   sleepEndTime:           null,
   sleepCountdownInterval: null,
@@ -109,26 +135,24 @@ const state = {
   armDragging:            false,
   armOnRecord:            false,
   armDropTimeout:         null,
+  grooveSweepRaf:         null,
 };
 
 
 /* ─────────────────────────────────────────────────────
    3. DOM REFERENCES
 ───────────────────────────────────────────────────── */
-// Audio
 const audio = document.getElementById("audioPlayer");
 
-// Turntable elements
 const vinylDisk  = document.getElementById("vinylDisk");
 const vinylGlow  = document.getElementById("vinylGlow");
 const vinylArt   = document.getElementById("vinylArt");
 const tonearm    = document.getElementById("tonearm");
 const armPivot   = document.getElementById("armPivot");
-const needle     = document.getElementById("needle");
+const needleLine = document.getElementById("needleLine");
 const bufRing    = document.getElementById("bufRing");
 const armHint    = document.getElementById("armHint");
 
-// Player UI
 const songTitle        = document.getElementById("songTitle");
 const songArtist       = document.getElementById("songArtist");
 const songContextLabel = document.getElementById("songContextLabel");
@@ -148,7 +172,6 @@ const playerLikeBtn    = document.getElementById("playerLikeBtn");
 const playerMoreBtn    = document.getElementById("playerMoreBtn");
 const speedBtn         = document.getElementById("speedBtn");
 
-// Song lists
 const songList          = document.getElementById("songList");
 const likedList         = document.getElementById("likedList");
 const recentList        = document.getElementById("recentList");
@@ -156,7 +179,6 @@ const searchResultsList = document.getElementById("searchResultsList");
 const playlistList      = document.getElementById("playlistList");
 const playlistDetail    = document.getElementById("playlistDetail");
 
-// Mini player
 const miniPlayer       = document.getElementById("miniPlayer");
 const mpImg            = document.getElementById("mpImg");
 const mpTitle          = document.getElementById("mpTitle");
@@ -167,13 +189,11 @@ const mpNextBtn        = document.getElementById("mpNextBtn");
 const mpIcon           = document.getElementById("mpIcon");
 const miniProgressFill = document.getElementById("miniProgressFill");
 
-// Context menu
 const ctxMenu          = document.getElementById("ctxMenu");
 const ctxPlayNext      = document.getElementById("ctxPlayNext");
 const ctxAddToPlaylist = document.getElementById("ctxAddToPlaylist");
 const ctxDownload      = document.getElementById("ctxDownload");
 
-// Misc
 const toast            = document.getElementById("toast");
 const searchInput      = document.getElementById("searchInput");
 const searchClearBtn   = document.getElementById("searchClearBtn");
@@ -182,21 +202,10 @@ const meloLogo         = document.getElementById("meloLogo");
 const aboutPanel       = document.getElementById("aboutPanel");
 const aboutClose       = document.getElementById("aboutClose");
 
-// About panel toggle
-meloLogo.addEventListener("click", () => {
-  aboutPanel.classList.add("active");
-});
-
-aboutClose.addEventListener("click", () => {
-  aboutPanel.classList.remove("active");
-});
-
-// Queue
 const queueToggleBtn   = document.getElementById("queueToggleBtn");
 const queueDrawer      = document.getElementById("queueDrawer");
 const queueInner       = document.getElementById("queueInner");
 
-// Sleep timer
 const sleepTimerBtn    = document.getElementById("sleepTimerBtn");
 const sleepPanel       = document.getElementById("sleepPanel");
 const sleepOverlay     = document.getElementById("sleepOverlay");
@@ -205,11 +214,9 @@ const sleepCancelBtn   = document.getElementById("sleepCancelBtn");
 const sleepNotice      = document.getElementById("sleepNotice");
 const sleepNoticeText  = document.getElementById("sleepNoticeText");
 
-// Speed
 const speedPanel       = document.getElementById("speedPanel");
 const speedOverlay     = document.getElementById("speedOverlay");
 
-// Playlist sheet
 const playlistOverlay     = document.getElementById("playlistOverlay");
 const playlistPanel       = document.getElementById("playlistPanel");
 const playlistSheetHelper = document.getElementById("playlistSheetHelper");
@@ -217,7 +224,6 @@ const playlistSheetList   = document.getElementById("playlistSheetList");
 const playlistNameInput   = document.getElementById("playlistNameInput");
 const createPlaylistBtn   = document.getElementById("createPlaylistBtn");
 
-// Set about year
 document.getElementById("aboutYear").textContent = new Date().getFullYear();
 
 
@@ -225,7 +231,7 @@ document.getElementById("aboutYear").textContent = new Date().getFullYear();
    4. HELPER FUNCTIONS
 ───────────────────────────────────────────────────── */
 const getSongById     = id  => SONGS.find(s => s.id === id) || null;
-const getPlaylistById = id  => state.playlists.find(p => p.id === id) || null;
+const getPlaylistById = id  => getAllPlaylists().find(p => p.id === id) || null;
 const currentSong     = ()  => SONGS[state.currentIndex] || SONGS[0];
 
 function formatTime(sec) {
@@ -254,13 +260,7 @@ function showArmHint(show) {
 
 
 /* ─────────────────────────────────────────────────────
-   5. TONEARM (drag system)
-   ─────────────────────────────────────────────────────
-   The arm rotates around its pivot point. We convert
-   pointer position into an angle, clamp it, and snap
-   to play/rest positions when drag ends.
-   NOTE: NO swipe-to-change-song — only the tonearm
-   element responds to drag.
+   5. TONEARM — DRAG SYSTEM + GROOVE SWEEP
 ───────────────────────────────────────────────────── */
 function getPivotCenter() {
   const r = armPivot.getBoundingClientRect();
@@ -282,17 +282,43 @@ function isArmOnRecord(angle) {
 
 function renderArm(angle, animated) {
   tonearm.style.transition = animated
-    ? "transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94)"
+    ? "transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94)"
     : "none";
   tonearm.style.transform = `rotate(${angle - 90}deg)`;
+  state.armAngle = angle;
 }
 
 function snapArm(angle) {
-  state.armAngle = angle;
   renderArm(angle, true);
 }
 
-// Called when arm position changes during drag
+function tickGrooveSweep() {
+  if (!state.isPlaying || state.armDragging) {
+    state.grooveSweepRaf = null;
+    return;
+  }
+  if (audio.duration && audio.duration > 0) {
+    const progress = Math.max(0, Math.min(1, audio.currentTime / audio.duration));
+    const targetAngle = ARM_PLAY + (ARM_MAX - ARM_PLAY) * progress;
+    tonearm.style.transition = "none";
+    tonearm.style.transform = `rotate(${targetAngle - 90}deg)`;
+    state.armAngle = targetAngle;
+  }
+  state.grooveSweepRaf = requestAnimationFrame(tickGrooveSweep);
+}
+
+function startGrooveSweep() {
+  if (state.grooveSweepRaf) cancelAnimationFrame(state.grooveSweepRaf);
+  state.grooveSweepRaf = requestAnimationFrame(tickGrooveSweep);
+}
+
+function stopGrooveSweep() {
+  if (state.grooveSweepRaf) {
+    cancelAnimationFrame(state.grooveSweepRaf);
+    state.grooveSweepRaf = null;
+  }
+}
+
 function setArmOnRecord(isOn) {
   if (isOn === state.armOnRecord) return;
   state.armOnRecord = isOn;
@@ -301,7 +327,6 @@ function setArmOnRecord(isOn) {
   state.armDropTimeout = null;
 
   if (isOn) {
-    // Slight delay before playback starts (simulates needle settling)
     state.armDropTimeout = setTimeout(() => {
       state.armDropTimeout = null;
       if (state.armOnRecord && !state.isPlaying) startPlayback();
@@ -312,6 +337,7 @@ function setArmOnRecord(isOn) {
 }
 
 function startArmDrag(e) {
+  stopGrooveSweep();
   state.armDragging = true;
   tonearm.style.transition = "none";
   window.addEventListener("mousemove", onArmMove);
@@ -324,7 +350,6 @@ function startArmDrag(e) {
 function onArmMove(e) {
   if (!state.armDragging) return;
   const a = clampArm(angleFromPointer(e.clientX, e.clientY));
-  state.armAngle = a;
   renderArm(a, false);
   setArmOnRecord(isArmOnRecord(a));
 }
@@ -334,7 +359,6 @@ function onArmTouch(e) {
   e.preventDefault();
   const t = e.touches[0];
   const a = clampArm(angleFromPointer(t.clientX, t.clientY));
-  state.armAngle = a;
   renderArm(a, false);
   setArmOnRecord(isArmOnRecord(a));
 }
@@ -345,23 +369,39 @@ function endArmDrag() {
   window.removeEventListener("mouseup",   endArmDrag);
   window.removeEventListener("touchmove", onArmTouch);
   window.removeEventListener("touchend",  endArmDrag);
-  snapArm(state.armOnRecord ? ARM_PLAY : ARM_REST);
+
+  if (state.armOnRecord) {
+    if (audio.duration > 0) {
+      const progress = Math.max(0, Math.min(1, audio.currentTime / audio.duration));
+      snapArm(ARM_PLAY + (ARM_MAX - ARM_PLAY) * progress);
+    } else {
+      snapArm(ARM_PLAY);
+    }
+    if (state.isPlaying) startGrooveSweep();
+  } else {
+    snapArm(ARM_REST);
+  }
 }
 
-// Only the tonearm element responds to drag — NOT the whole turntable stage
 tonearm.addEventListener("mousedown",  startArmDrag);
 tonearm.addEventListener("touchstart", e => startArmDrag(e.touches[0]), { passive: false });
 
-// Programmatic arm movement
 function armGoPlay() {
   state.armOnRecord = true;
-  snapArm(ARM_PLAY);
-  needle.classList.add("on");
+  if (audio.duration > 0) {
+    const progress = Math.max(0, Math.min(1, audio.currentTime / audio.duration));
+    snapArm(ARM_PLAY + (ARM_MAX - ARM_PLAY) * progress);
+  } else {
+    snapArm(ARM_PLAY);
+  }
+  tonearm.classList.add("needle-on");
 }
+
 function armGoRest() {
   state.armOnRecord = false;
+  stopGrooveSweep();
   snapArm(ARM_REST);
-  needle.classList.remove("on");
+  tonearm.classList.remove("needle-on");
 }
 
 
@@ -375,9 +415,10 @@ function startPlayback() {
     state.isPlaying = true;
     vinylDisk.classList.add("spinning");
     vinylGlow.classList.add("active");
-    needle.classList.add("on");
+    tonearm.classList.add("needle-on");
     updatePlayBtns(true);
     updateEqState(true);
+    startGrooveSweep();
     _savePlayerState();
   }).catch(() => {});
 }
@@ -390,7 +431,8 @@ function stopPlayback() {
   state.isPlaying = false;
   vinylDisk.classList.remove("spinning");
   vinylGlow.classList.remove("active");
-  needle.classList.remove("on");
+  tonearm.classList.remove("needle-on");
+  stopGrooveSweep();
   updatePlayBtns(false);
   updateEqState(false);
   _savePlayerState();
@@ -428,21 +470,19 @@ function loadSong(index, autoplay = false) {
   state.recentAddedForCurrent = false;
   state.hasLoadedSong = true;
 
-  // Ensure song is known to current queue
   ensureSongInCurrentQueue(song.id);
 
-  // Reset playback state silently
   audio.pause();
   state.isPlaying = false;
   vinylDisk.classList.remove("spinning");
   vinylGlow.classList.remove("active");
+  stopGrooveSweep();
 
   audio.src = song.src;
   audio.volume = state.volume;
   audio.playbackRate = state.playbackSpeed;
   audio.load();
 
-  // Update all art and text
   vinylArt.src = song.cover;
   mpImg.src    = song.cover;
   songTitle.textContent  = song.title;
@@ -450,7 +490,6 @@ function loadSong(index, autoplay = false) {
   mpTitle.textContent    = song.title;
   mpArtist.textContent   = song.artist;
 
-  // Reset progress
   progressFill.style.width = "0%";
   miniProgressFill.style.width = "0%";
   currentTimeEl.textContent = "0:00";
@@ -479,7 +518,6 @@ function loadSong(index, autoplay = false) {
 }
 
 function nextSong(fromEnded = false) {
-  // Play-next queue takes priority
   if (state.playNextQueue.length) {
     const id  = state.playNextQueue.shift();
     const idx = SONGS.findIndex(s => s.id === id);
@@ -520,7 +558,6 @@ function nextSong(fromEnded = false) {
 }
 
 function prevSong() {
-  // If more than 3s played, restart current song
   if (audio.currentTime > 3) { audio.currentTime = 0; return; }
 
   const qIds = getNormQueueIds();
@@ -535,7 +572,6 @@ function prevSong() {
   loadSong(SONGS.findIndex(s => s.id === prevId), true);
 }
 
-// Entry points for playing from different contexts
 function playSongFromLibrary(song) {
   useLibraryQueue();
   loadSong(SONGS.findIndex(s => s.id === song.id), true);
@@ -560,7 +596,6 @@ function getNormQueueIds() {
     : ALL_SONG_IDS;
   const filtered = src.filter(id => getSongById(id));
   if (filtered.length) return filtered;
-  // Fallback: use full library unless we're in a playlist context
   return state.currentQueueType === "playlist" ? [] : [...ALL_SONG_IDS];
 }
 
@@ -626,7 +661,6 @@ function updateLikeBtn() {
   if (!state.hasLoadedSong) return;
   const isLiked = state.liked.has(currentSong().id);
 
-  // Preserve the burst element
   const burst = playerLikeBtn.querySelector(".burst") || (() => {
     const d = document.createElement("div");
     d.className = "burst";
@@ -673,7 +707,7 @@ function updateMiniPlayer() {
 
 function triggerLikeAnim() {
   playerLikeBtn.classList.remove("pop");
-  void playerLikeBtn.offsetWidth; // force reflow
+  void playerLikeBtn.offsetWidth;
   playerLikeBtn.classList.add("pop");
   setTimeout(() => playerLikeBtn.classList.remove("pop"), 500);
 }
@@ -691,8 +725,6 @@ function refreshViews() {
 function updateRepeatBtn() {
   const mode = state.repeatMode;
   repeatBtn.classList.toggle("active", mode !== "off");
-
-  // Build SVG paths for repeat icon
   const BASE = '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>';
   const ONE_BADGE = '<text x="9.5" y="13.5" font-size="6.5" fill="currentColor" font-family="Outfit" font-weight="bold">1</text>';
   repeatIcon.innerHTML = BASE + (mode === "one" ? ONE_BADGE : "");
@@ -701,8 +733,8 @@ function updateRepeatBtn() {
 
 /* ─────────────────────────────────────────────────────
    9. PERSISTENCE
+   — global playlists are NEVER written to localStorage
 ───────────────────────────────────────────────────── */
-// Save current playback position & queue (called frequently)
 function _savePlayerState() {
   localStorage.setItem("melo_player", JSON.stringify({
     index:           state.currentIndex,
@@ -715,16 +747,15 @@ function _savePlayerState() {
   }));
 }
 
-// Save likes, recents, playlists, volume
 function _savePersist() {
   localStorage.setItem("melo_liked",     JSON.stringify([...state.liked]));
   localStorage.setItem("melo_recent",    JSON.stringify(state.recentlyPlayed));
   localStorage.setItem("melo_volume",    state.volume);
+  // Only save USER playlists — never global ones
   localStorage.setItem("melo_playlists", JSON.stringify(state.playlists));
   localStorage.setItem("melo_sel_pl",    state.selectedPlaylistId || "");
 }
 
-// Clean playlist data from storage
 function sanitizePlaylists(raw) {
   if (!Array.isArray(raw)) return [];
   return raw.map((p, i) => ({
@@ -733,7 +764,7 @@ function sanitizePlaylists(raw) {
     songIds: Array.isArray(p.songIds)
       ? [...new Set(p.songIds.filter(id => getSongById(id)))]
       : [],
-  })).filter(p => p.name);
+  })).filter(p => p.name && !isGlobalPlaylist(p.id)); // extra guard: strip any accidentally stored globals
 }
 
 function _loadPersist() {
@@ -748,14 +779,13 @@ function _loadPersist() {
 
     state.selectedPlaylistId = localStorage.getItem("melo_sel_pl") || null;
     if (!getPlaylistById(state.selectedPlaylistId)) {
-      state.selectedPlaylistId = state.playlists[0]?.id || null;
+      state.selectedPlaylistId = getAllPlaylists()[0]?.id || null;
     }
 
     volSlider.value  = state.volume * 100;
     audio.volume     = state.volume;
     setPlaybackSpeed(state.playbackSpeed, { silent: true, persist: false });
 
-    // Mark the active speed option
     document.querySelectorAll(".sheet-opt[data-speed]").forEach(b => {
       b.classList.toggle("sheet-opt-active", parseFloat(b.dataset.speed) === state.playbackSpeed);
     });
@@ -779,7 +809,6 @@ function _loadPlayerState() {
     shuffleBtn.classList.toggle("active", state.shuffle);
     updateRepeatBtn();
 
-    // Restore queue context
     if (d.queueType === "playlist" && d.queuePlaylistId && getPlaylistById(d.queuePlaylistId)) {
       usePlaylistQueue(getPlaylistById(d.queuePlaylistId));
     } else if (Array.isArray(d.queueSongIds) && d.queueSongIds.length) {
@@ -790,7 +819,6 @@ function _loadPlayerState() {
 
     loadSong(state.currentIndex, false);
 
-    // Restore seek position once metadata is available
     if (typeof d.time === "number" && d.time > 0) {
       audio.addEventListener("loadedmetadata", function rt() {
         audio.removeEventListener("loadedmetadata", rt);
@@ -807,8 +835,6 @@ function _loadPlayerState() {
 /* ─────────────────────────────────────────────────────
    10. RENDERING FUNCTIONS
 ───────────────────────────────────────────────────── */
-
-// Build a single song list item element
 function renderSongItem(song, { onSelect = () => playSongFromLibrary(song) } = {}) {
   const idx    = SONGS.findIndex(s => s.id === song.id);
   const active = idx === state.currentIndex;
@@ -865,7 +891,6 @@ function renderSongItem(song, { onSelect = () => playSongFromLibrary(song) } = {
   return el;
 }
 
-// Render a list of songs into a container
 function renderList(songs, container, emptyMsg) {
   container.innerHTML = "";
   if (!songs.length) {
@@ -882,7 +907,6 @@ function renderList(songs, container, emptyMsg) {
   container.appendChild(frag);
 }
 
-// Render Library, Liked, Recent lists
 function renderAll() {
   renderList(SONGS, songList, "No songs found");
   document.getElementById("songsCount").textContent = `${SONGS.length} songs`;
@@ -896,7 +920,6 @@ function renderAll() {
   document.getElementById("recentCount").textContent = `${recent.length} songs`;
 }
 
-// Search results
 function renderSearchResults(q) {
   searchResultsList.innerHTML = "";
   if (!q) return;
@@ -943,7 +966,6 @@ function renderSearchResults(q) {
   searchResultsList.appendChild(frag);
 }
 
-// Queue drawer
 function renderQueue() {
   queueInner.innerHTML = "";
 
@@ -952,7 +974,6 @@ function renderQueue() {
   lbl.textContent = state.currentQueueType === "playlist" ? "Playlist Queue" : "Up Next";
   queueInner.appendChild(lbl);
 
-  // Play-next overrides
   if (state.playNextQueue.length) {
     state.playNextQueue.forEach((id, i) => {
       const s = getSongById(id);
@@ -1002,19 +1023,17 @@ function makeQueueItem(song, pos, isPlayNext) {
   return el;
 }
 
-// Playlist view (list + detail)
 function renderPlaylists() {
+  const all = getAllPlaylists();
   const cnt = document.getElementById("playlistCount");
-  cnt.textContent = `${state.playlists.length} playlist${state.playlists.length === 1 ? "" : "s"}`;
+  cnt.textContent = `${all.length} playlist${all.length === 1 ? "" : "s"}`;
 
-  // Auto-select first playlist if none selected
-  if (!state.selectedPlaylistId && state.playlists.length) {
-    state.selectedPlaylistId = state.playlists[0].id;
+  if (!state.selectedPlaylistId && all.length) {
+    state.selectedPlaylistId = all[0].id;
   }
 
-  // ── Playlist cards ──────────────────────────────────
   playlistList.innerHTML = "";
-  if (!state.playlists.length) {
+  if (!all.length) {
     playlistList.innerHTML = `
       <div class="empty-card">
         <span class="em-ico">🎵</span>
@@ -1022,44 +1041,76 @@ function renderPlaylists() {
         <p>Then add songs via the three-dot menu.</p>
       </div>`;
   } else {
-    const frag = document.createDocumentFragment();
-    state.playlists.forEach(pl => {
-      const card = document.createElement("div");
-      card.className = `playlist-card${pl.id === state.selectedPlaylistId ? " active" : ""}`;
-      card.innerHTML = `
-        <div class="playlist-card-main">
-          <div class="playlist-card-title">${pl.name}</div>
-          <div class="playlist-card-meta">${pl.songIds.length} song${pl.songIds.length === 1 ? "" : "s"}</div>
-        </div>
-        <div class="playlist-card-actions">
-          <button class="playlist-icon-btn" data-action="play" title="Play playlist" aria-label="Play playlist">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-          <button class="playlist-icon-btn" data-action="del" title="Delete playlist" aria-label="Delete playlist">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
-          </button>
-        </div>`;
+    // Section header: Global
+    if (GLOBAL_PLAYLISTS.length) {
+      const ghdr = document.createElement("div");
+      ghdr.className = "playlist-section-hdr";
+      ghdr.textContent = "Global";
+      playlistList.appendChild(ghdr);
+    }
 
-      card.addEventListener("click", () => {
-        state.selectedPlaylistId = pl.id;
-        _savePersist();
-        renderPlaylists();
-      });
-      card.querySelector('[data-action="play"]').addEventListener("click", e => {
-        e.stopPropagation();
-        playPlaylist(pl.id);
-      });
-      card.querySelector('[data-action="del"]').addEventListener("click", e => {
-        e.stopPropagation();
-        deletePlaylist(pl.id);
-      });
-      frag.appendChild(card);
+    const frag = document.createDocumentFragment();
+
+    // Render global playlists first
+    GLOBAL_PLAYLISTS.forEach(pl => {
+      frag.appendChild(makePlaylistCard(pl, true));
     });
+
+    // Section header: Your Playlists (only if user has any)
+    if (state.playlists.length) {
+      const uhdr = document.createElement("div");
+      uhdr.className = "playlist-section-hdr";
+      uhdr.textContent = "Your Playlists";
+      frag.appendChild(uhdr);
+      state.playlists.forEach(pl => {
+        frag.appendChild(makePlaylistCard(pl, false));
+      });
+    }
+
     playlistList.appendChild(frag);
   }
 
-  // ── Playlist detail ─────────────────────────────────
   renderPlaylistDetail();
+}
+
+function makePlaylistCard(pl, isGlobal) {
+  const card = document.createElement("div");
+  card.className = `playlist-card${pl.id === state.selectedPlaylistId ? " active" : ""}${isGlobal ? " global" : ""}`;
+
+  card.innerHTML = `
+    <div class="playlist-card-main">
+      <div class="playlist-card-title-row">
+        <div class="playlist-card-title">${pl.name}</div>
+        ${isGlobal ? '<span class="global-badge">Global</span>' : ''}
+      </div>
+      <div class="playlist-card-meta">${pl.songIds.length} song${pl.songIds.length === 1 ? "" : "s"}</div>
+    </div>
+    <div class="playlist-card-actions">
+      <button class="playlist-icon-btn" data-action="play" title="Play playlist" aria-label="Play playlist">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      ${!isGlobal ? `
+      <button class="playlist-icon-btn" data-action="del" title="Delete playlist" aria-label="Delete playlist">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+      </button>` : ''}
+    </div>`;
+
+  card.addEventListener("click", () => {
+    state.selectedPlaylistId = pl.id;
+    _savePersist();
+    renderPlaylists();
+  });
+  card.querySelector('[data-action="play"]').addEventListener("click", e => {
+    e.stopPropagation();
+    playPlaylist(pl.id);
+  });
+  if (!isGlobal) {
+    card.querySelector('[data-action="del"]').addEventListener("click", e => {
+      e.stopPropagation();
+      deletePlaylist(pl.id);
+    });
+  }
+  return card;
 }
 
 function renderPlaylistDetail() {
@@ -1076,29 +1127,36 @@ function renderPlaylistDetail() {
     return;
   }
 
+  const isGlobal = isGlobalPlaylist(sel.id);
   const songs = sel.songIds.map(id => getSongById(id)).filter(Boolean);
 
-  // Header
   const hdr = document.createElement("div");
   hdr.className = "playlist-detail-header";
   hdr.innerHTML = `
     <div>
-      <div class="playlist-detail-title">${sel.name}</div>
-      <div class="playlist-detail-subtitle">${songs.length} song${songs.length === 1 ? "" : "s"} — only these will play.</div>
+      <div class="playlist-detail-title-row">
+        <div class="playlist-detail-title">${sel.name}</div>
+        ${isGlobal ? '<span class="global-badge">Global</span>' : ''}
+      </div>
+      <div class="playlist-detail-subtitle">${songs.length} song${songs.length === 1 ? "" : "s"}${isGlobal ? " · Read-only" : " — only these will play."}</div>
     </div>
     <div class="playlist-detail-actions">
       <button class="pl-primary-btn" id="playSelPl">Play</button>
-      <button class="pl-secondary-btn" id="delSelPl">Delete</button>
+      ${!isGlobal ? '<button class="pl-secondary-btn" id="delSelPl">Delete</button>' : ''}
     </div>`;
   playlistDetail.appendChild(hdr);
 
   hdr.querySelector("#playSelPl").addEventListener("click", () => playPlaylist(sel.id));
-  hdr.querySelector("#delSelPl").addEventListener("click",  () => deletePlaylist(sel.id));
+  if (!isGlobal) {
+    hdr.querySelector("#delSelPl").addEventListener("click",  () => deletePlaylist(sel.id));
+  }
 
   if (!songs.length) {
     const empty = document.createElement("div");
     empty.className = "empty-card";
-    empty.innerHTML = '<span class="em-ico">➕</span>No songs yet<p>Use the ⋮ menu on any song to add here.</p>';
+    empty.innerHTML = isGlobal
+      ? '<span class="em-ico">🌐</span>No songs in this global playlist yet.'
+      : '<span class="em-ico">➕</span>No songs yet<p>Use the ⋮ menu on any song to add here.</p>';
     playlistDetail.appendChild(empty);
     return;
   }
@@ -1111,7 +1169,6 @@ function renderPlaylistDetail() {
   playlistDetail.appendChild(list);
 }
 
-// Playlist add/remove sheet
 function renderPlaylistSheet() {
   const song = getSongById(state.ctxSongId);
   playlistSheetList.innerHTML = "";
@@ -1119,7 +1176,8 @@ function renderPlaylistSheet() {
     ? `Add or remove "${song.title}" from a playlist.`
     : "Choose a playlist.";
 
-  if (!state.playlists.length) {
+  const all = getAllPlaylists();
+  if (!all.length) {
     playlistSheetList.innerHTML = `
       <div class="empty-card">
         <span class="em-ico">🎼</span>
@@ -1130,6 +1188,18 @@ function renderPlaylistSheet() {
   }
 
   const frag = document.createDocumentFragment();
+
+  // Global playlists shown as read-only in sheet
+  GLOBAL_PLAYLISTS.forEach(pl => {
+    const isIn = pl.songIds.includes(state.ctxSongId);
+    const btn  = document.createElement("button");
+    btn.className = `pl-sheet-item pl-sheet-global${isIn ? " active" : ""}`;
+    btn.disabled  = true;
+    btn.innerHTML = `<span class="global-badge">Global</span> ${pl.name}${isIn ? " ✓" : ""}`;
+    frag.appendChild(btn);
+  });
+
+  // User playlists — interactive
   state.playlists.forEach(pl => {
     const isIn = pl.songIds.includes(state.ctxSongId);
     const btn  = document.createElement("button");
@@ -1138,6 +1208,7 @@ function renderPlaylistSheet() {
     btn.addEventListener("click", () => toggleSongInPlaylist(state.ctxSongId, pl.id));
     frag.appendChild(btn);
   });
+
   playlistSheetList.appendChild(frag);
 }
 
@@ -1148,7 +1219,7 @@ function renderPlaylistSheet() {
 function createPlaylist() {
   const name = playlistNameInput.value.trim();
   if (!name) { showToast("Enter a name"); playlistNameInput.focus(); return; }
-  if (state.playlists.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+  if (getAllPlaylists().some(p => p.name.toLowerCase() === name.toLowerCase())) {
     showToast("Name already exists");
     return;
   }
@@ -1163,18 +1234,22 @@ function createPlaylist() {
 }
 
 function deletePlaylist(id) {
+  // Block deletion of global playlists
+  if (isGlobalPlaylist(id)) {
+    showToast("Global playlists can't be deleted");
+    return;
+  }
+
   const pl = getPlaylistById(id);
   if (!pl || !confirm(`Delete "${pl.name}"?`)) return;
 
   state.playlists = state.playlists.filter(p => p.id !== id);
 
-  // If we were playing this playlist, fall back to library
   if (state.currentQueueType === "playlist" && state.currentQueuePlaylistId === id) {
     useLibraryQueue();
   }
-  // Select next available
   if (state.selectedPlaylistId === id) {
-    state.selectedPlaylistId = state.playlists[0]?.id || null;
+    state.selectedPlaylistId = getAllPlaylists()[0]?.id || null;
   }
   _savePersist();
   renderPlaylists();
@@ -1183,6 +1258,12 @@ function deletePlaylist(id) {
 }
 
 function toggleSongInPlaylist(songId, plId) {
+  // Block modification of global playlists
+  if (isGlobalPlaylist(plId)) {
+    showToast("Global playlists are read-only");
+    return;
+  }
+
   const pl   = getPlaylistById(plId);
   const song = getSongById(songId);
   if (!pl || !song) return;
@@ -1191,7 +1272,6 @@ function toggleSongInPlaylist(songId, plId) {
   if (exists) {
     pl.songIds = pl.songIds.filter(id => id !== songId);
 
-    // If currently playing this playlist and we removed the active song
     if (state.currentQueueType === "playlist" && state.currentQueuePlaylistId === plId) {
       usePlaylistQueue(pl);
       if (currentSong().id === songId) {
@@ -1216,7 +1296,8 @@ function playPlaylist(id) {
   state.selectedPlaylistId = pl.id;
   usePlaylistQueue(pl);
   loadSong(SONGS.findIndex(s => s.id === pl.songIds[0]), true);
-  _savePersist();
+  // Only persist selectedPlaylistId for user playlists
+  if (!isGlobalPlaylist(id)) _savePersist();
   renderPlaylists();
   switchTab("player");
 }
@@ -1252,7 +1333,6 @@ function switchTab(tab) {
   state.activeTab = tab;
   localStorage.setItem("melo_tab", tab);
 
-  // Clear search when switching tabs
   if (state.searchQuery) {
     searchInput.value = "";
     searchClearBtn.classList.remove("visible");
@@ -1335,7 +1415,6 @@ document.addEventListener("click", e => {
   ) closeCtxMenu();
 });
 
-// Playlist sheet
 function openPlaylistSheet(id) {
   state.ctxSongId = id;
   renderPlaylistSheet();
@@ -1481,14 +1560,12 @@ audio.addEventListener("timeupdate", () => {
   currentTimeEl.textContent    = formatTime(audio.currentTime);
   totalTimeEl.textContent      = formatTime(audio.duration);
 
-  // Add to recently played once halfway through
   if (!state.recentAddedForCurrent && audio.currentTime / audio.duration >= 0.5) {
     addToRecent(currentSong().id);
     state.recentAddedForCurrent = true;
     renderAll();
   }
 
-  // Throttle state saving to every 5 seconds
   const now = Date.now();
   if (now - _lastStateSave > 5000) {
     _savePlayerState();
@@ -1535,18 +1612,15 @@ playBtn.addEventListener("click", togglePlay);
 prevBtn.addEventListener("click", prevSong);
 nextBtn.addEventListener("click", nextSong);
 
-// Mini player controls
 mpPlayBtn.addEventListener("click", e => { e.stopPropagation(); togglePlay(); });
 mpPrevBtn.addEventListener("click", e => { e.stopPropagation(); prevSong(); });
 mpNextBtn.addEventListener("click", e => { e.stopPropagation(); nextSong(); });
 
-// Clicking mini player (not its buttons) goes to player tab
 miniPlayer.addEventListener("click", e => {
   if (e.target.closest("#mpPlayBtn, #mpPrevBtn, #mpNextBtn")) return;
   switchTab("player");
 });
 
-// Shuffle
 shuffleBtn.addEventListener("click", () => {
   state.shuffle = !state.shuffle;
   shuffleBtn.classList.toggle("active", state.shuffle);
@@ -1554,7 +1628,6 @@ shuffleBtn.addEventListener("click", () => {
   _savePlayerState();
 });
 
-// Repeat
 repeatBtn.addEventListener("click", () => {
   const idx = REPEAT_MODES.indexOf(state.repeatMode);
   state.repeatMode = REPEAT_MODES[(idx + 1) % REPEAT_MODES.length];
@@ -1563,20 +1636,17 @@ repeatBtn.addEventListener("click", () => {
   _savePlayerState();
 });
 
-// Volume
 volSlider.addEventListener("input", () => {
   state.volume = volSlider.value / 100;
   audio.volume = state.volume;
   _savePersist();
 });
 
-// Mute button (just toggles audio.muted, no visual vol change)
 document.getElementById("volMuteBtn").addEventListener("click", () => {
   audio.muted = !audio.muted;
   showToast(audio.muted ? "Muted" : "Unmuted");
 });
 
-// Like
 playerLikeBtn.addEventListener("click", () => {
   if (!state.hasLoadedSong) { showToast("Select a song first"); return; }
   toggleLike(currentSong().id);
@@ -1587,13 +1657,11 @@ playerLikeBtn.addEventListener("click", () => {
   _savePersist();
 });
 
-// More (three-dot) on player
 playerMoreBtn.addEventListener("click", e => {
   if (!state.hasLoadedSong) { showToast("Select a song first"); return; }
   openCtxMenu(e, currentSong().id);
 });
 
-// Queue toggle
 queueToggleBtn.addEventListener("click", () => {
   state.queueOpen = !state.queueOpen;
   queueDrawer.classList.toggle("open", state.queueOpen);
@@ -1602,12 +1670,28 @@ queueToggleBtn.addEventListener("click", () => {
   if (state.queueOpen) renderQueue();
 });
 
-// About panel
-meloLogo.addEventListener("click",  () => { aboutPanel.classList.add("open"); aboutPanel.scrollTop = 0; });
-aboutClose.addEventListener("click", () => aboutPanel.classList.remove("open"));
-aboutPanel.addEventListener("click", e => { if (e.target === aboutPanel) aboutPanel.classList.remove("open"); });
+meloLogo.addEventListener("click", () => {
+  aboutPanel.classList.add("active");
+  aboutPanel.scrollTop = 0;
 
-// Theme toggle
+  requestAnimationFrame(() => {
+    aboutPanel.classList.add("open");
+  });
+});
+
+function closeAboutPanel() {
+  aboutPanel.classList.remove("open");
+
+  setTimeout(() => {
+    aboutPanel.classList.remove("active");
+  }, 450);
+}
+
+aboutClose.addEventListener("click", closeAboutPanel);
+aboutPanel.addEventListener("click", e => {
+  if (e.target === aboutPanel) closeAboutPanel();
+});
+
 themeToggle.addEventListener("click", () => {
   const isDark = document.documentElement.dataset.theme === "dark";
   document.documentElement.dataset.theme = isDark ? "light" : "dark";
@@ -1630,7 +1714,6 @@ function updateThemeIcon() {
     : `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
 }
 
-// Long press helper (for context menu on mobile)
 function attachLongPress(el, cb, delay = 500) {
   let timer = null;
   el.addEventListener("touchstart", () => {
@@ -1769,8 +1852,6 @@ document.addEventListener("keydown", e => {
 /* ─────────────────────────────────────────────────────
    22. INITIALISATION
 ───────────────────────────────────────────────────── */
-
-// Preload song durations in the background
 function preloadDurations() {
   SONGS.forEach(song => {
     if (song._duration) return;
@@ -1779,7 +1860,6 @@ function preloadDurations() {
     probe.src = song.src;
     probe.addEventListener("loadedmetadata", () => {
       song._duration = formatTime(probe.duration);
-      // Update any visible duration cells
       document.querySelectorAll(`.song-item[data-id="${song.id}"] .si-dur`).forEach(el => {
         el.textContent = song._duration;
       });
@@ -1796,12 +1876,10 @@ function init() {
   renderAll();
   renderPlaylists();
 
-  // Set arm to rest without animation
   renderArm(ARM_REST, false);
 
   _loadPlayerState();
 
-  // Activate saved tab
   if (state.activeTab !== "player") {
     switchTab(state.activeTab);
   } else {
@@ -1811,7 +1889,6 @@ function init() {
   updatePlaybackContextLabel();
   updateRepeatBtn();
 
-  // Show arm hint briefly on first load
   setTimeout(() => {
     if (!state.isPlaying) {
       showArmHint(true);
@@ -1819,7 +1896,6 @@ function init() {
     }
   }, 1000);
 
-  // Start preloading durations after a short delay
   setTimeout(preloadDurations, 900);
 }
 
