@@ -10,7 +10,7 @@
    6.  Tabs
    7.  Screen & views
    8.  Turntable stage
-   9.  Tonearm
+   9.  Tonearm (S-curve SVG)
    10. Song meta
    11. Action row
    12. Progress bar
@@ -39,43 +39,47 @@
   --amber-soft:      rgba(232,160,32,0.10);
   --amber-light:     #F0C060;
 
-  /* Dark-theme surfaces */
-  --bg:              #0D0B08;
-  --bg2:             #121008;
-  --surface:         #1C1912;
-  --surface2:        #242018;
+  /* Dark-theme surfaces — deep warm mahogany tones */
+  --bg:              #0E0A06;
+  --bg2:             #120E08;
+  --surface:         #1C1710;
+  --surface2:        #232018;
   --surface3:        #2E2A1E;
-  --surface4:        #3A3428;
-  --border:          rgba(232,160,32,0.08);
-  --border2:         rgba(232,160,32,0.14);
+  --surface4:        #3A3526;
+  --border:          rgba(232,160,32,0.07);
+  --border2:         rgba(232,160,32,0.13);
   --border3:         rgba(232,160,32,0.22);
 
   /* Text */
-  --text:            #EDE0C4;
-  --text2:           #9A8E74;
-  --text3:           #5C5444;
-  --text4:           #3A3428;
+  --text:            #EAD9B0;
+  --text2:           #8C7E5E;
+  --text3:           #524A38;
+  --text4:           #322E20;
 
   /* Vinyl colours */
-  --vinyl-outer:     #060504;
-  --vinyl-mid:       #111008;
-  --label-bg:        #1C1810;
+  --vinyl-outer:     #040302;
+  --vinyl-mid:       #0D0A06;
+  --label-bg:        #161208;
 
   /* Platter */
-  --platter-bg:      #14120A;
-  --platter-rim:     #222018;
-  --felt-color:      #1A1810;
+  --platter-bg:      #100C08;
+  --platter-rim:     #201E14;
+  --felt-color:      #16120A;
+
+  /* App background — warm amber-tinted dark */
+  --app-bg-from:     #140F08;
+  --app-bg-to:       #060402;
 
   /* Shadows */
-  --shadow-xl:       0 28px 80px rgba(0,0,0,0.85);
-  --shadow-lg:       0 14px 44px rgba(0,0,0,0.65);
-  --shadow-md:       0 7px 24px rgba(0,0,0,0.50);
-  --shadow-sm:       0 3px 12px rgba(0,0,0,0.38);
+  --shadow-xl:       0 32px 90px rgba(0,0,0,0.95);
+  --shadow-lg:       0 16px 50px rgba(0,0,0,0.75);
+  --shadow-md:       0 8px 28px rgba(0,0,0,0.60);
+  --shadow-sm:       0 3px 14px rgba(0,0,0,0.45);
 
   /* Misc */
-  --prog-track:      rgba(232,160,32,0.10);
-  --sheet-bg:        #1C1912;
-  --overlay-bg:      rgba(0,0,0,0.72);
+  --prog-track:      rgba(232,160,32,0.09);
+  --sheet-bg:        #1C1710;
+  --overlay-bg:      rgba(0,0,0,0.82);
   --radius-app:      36px;
   --radius-card:     16px;
   --radius-item:     12px;
@@ -88,36 +92,46 @@
   /* Easing */
   --ease-out:        cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Global badge */
+  --global-bg:       rgba(100,180,255,0.12);
+  --global-color:    #7DC4FF;
+  --global-border:   rgba(100,180,255,0.25);
 }
 
 /* Light theme overrides */
 [data-theme="light"] {
-  --bg:              #F5EED8;
-  --bg2:             #EFE8CC;
-  --surface:         #FBF5E6;
-  --surface2:        #F2EAD0;
-  --surface3:        #E8DEC0;
-  --surface4:        #D8CCA8;
-  --border:          rgba(100,80,20,0.10);
-  --border2:         rgba(100,80,20,0.16);
-  --border3:         rgba(100,80,20,0.24);
+  --bg:              #D4C89A;
+  --bg2:             #CEC290;
+  --surface:         #E2D8B2;
+  --surface2:        #D8CE9E;
+  --surface3:        #C8BE8A;
+  --surface4:        #B8AE78;
+  --border:          rgba(90,72,18,0.12);
+  --border2:         rgba(90,72,18,0.20);
+  --border3:         rgba(90,72,18,0.30);
   --text:            #1A1408;
-  --text2:           #5C4E30;
-  --text3:           #9A8860;
-  --text4:           #C4B080;
-  --vinyl-outer:     #080604;
-  --vinyl-mid:       #141008;
-  --label-bg:        #1A1408;
-  --platter-bg:      #D8CCA8;
-  --platter-rim:     #C4B488;
-  --felt-color:      #C8BC98;
-  --shadow-xl:       0 28px 80px rgba(0,0,0,0.20);
-  --shadow-lg:       0 14px 44px rgba(0,0,0,0.14);
-  --shadow-md:       0 7px 24px rgba(0,0,0,0.10);
-  --shadow-sm:       0 3px 12px rgba(0,0,0,0.07);
-  --prog-track:      rgba(100,80,20,0.12);
-  --sheet-bg:        #FBF5E6;
-  --overlay-bg:      rgba(20,14,0,0.50);
+  --text2:           #5A4A2A;
+  --text3:           #8A7850;
+  --text4:           #B0A070;
+  --vinyl-outer:     #060402;
+  --vinyl-mid:       #0E0A06;
+  --label-bg:        #161008;
+  --platter-bg:      #B8AE84;
+  --platter-rim:     #A8A070;
+  --felt-color:      #ACA876;
+  --shadow-xl:       0 28px 80px rgba(60,40,0,0.25);
+  --shadow-lg:       0 14px 44px rgba(60,40,0,0.16);
+  --shadow-md:       0 7px 24px rgba(60,40,0,0.12);
+  --shadow-sm:       0 3px 12px rgba(60,40,0,0.09);
+  --prog-track:      rgba(90,72,18,0.14);
+  --sheet-bg:        #E2D8B2;
+  --overlay-bg:      rgba(30,20,0,0.60);
+  --app-bg-from:     #C8BC88;
+  --app-bg-to:       #B4A870;
+  --global-bg:       rgba(20,80,160,0.10);
+  --global-color:    #2D6FB0;
+  --global-border:   rgba(20,80,160,0.22);
 }
 
 
@@ -131,21 +145,21 @@ body {
   height: 100%;
   min-height: 100dvh;
   font-family: var(--font-ui);
-  background: var(--bg);
+  background: var(--app-bg-to);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* Warm grain texture overlay */
+/* Warm grain texture */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9997;
-  opacity: 0.55;
+  opacity: 0.70;
   mix-blend-mode: overlay;
 }
 
@@ -162,6 +176,8 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   align-items: center;
   justify-content: center;
   padding: 16px;
+  /* Theme-aware background — uses CSS variables */
+  background: radial-gradient(ellipse at 40% 35%, var(--app-bg-from) 0%, var(--app-bg-to) 100%);
 }
 
 .frame {
@@ -174,9 +190,11 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   position: relative;
   display: flex;
   flex-direction: column;
-  /* Warm amber border instead of pure white */
   border: 1px solid var(--border2);
-  box-shadow: var(--shadow-xl), inset 0 1px 0 rgba(232,160,32,0.06);
+  box-shadow:
+    var(--shadow-xl),
+    inset 0 1px 0 rgba(232,160,32,0.05),
+    0 0 60px rgba(232,160,32,0.04);
 }
 
 /* Retro top chrome line */
@@ -185,12 +203,12 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(232,160,32,0.18) 30%, rgba(232,160,32,0.18) 70%, transparent);
+  background: linear-gradient(90deg, transparent, rgba(232,160,32,0.22) 30%, rgba(232,160,32,0.22) 70%, transparent);
   pointer-events: none;
   z-index: 1;
 }
 
-/* Retro scan-line effect (subtle) */
+/* Scan-line effect */
 .frame::after {
   content: '';
   position: absolute;
@@ -198,9 +216,9 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    rgba(0,0,0,0.015) 2px,
-    rgba(0,0,0,0.015) 4px
+    transparent 3px,
+    rgba(0,0,0,0.022) 3px,
+    rgba(0,0,0,0.022) 4px
   );
   pointer-events: none;
   z-index: 9996;
@@ -235,13 +253,12 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, #1A1408 30%, #060504 100%);
-  border: 1.5px solid rgba(232,160,32,0.25);
+  background: radial-gradient(circle at 50% 50%, #1A1408 30%, #040302 100%);
+  border: 1.5px solid rgba(232,160,32,0.28);
   position: relative;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7), 0 0 8px rgba(232,160,32,0.08);
 }
-/* Groove lines on logo record */
 .logo-record::before {
   content: '';
   position: absolute;
@@ -250,7 +267,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   background: repeating-radial-gradient(
     circle at 50% 50%,
     transparent 0, transparent 2px,
-    rgba(232,160,32,0.06) 2px, rgba(232,160,32,0.06) 2.4px
+    rgba(232,160,32,0.07) 2px, rgba(232,160,32,0.07) 2.4px
   );
 }
 .logo-record-center {
@@ -260,7 +277,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--amber);
-  box-shadow: 0 0 6px var(--amber-glow);
+  box-shadow: 0 0 7px var(--amber-glow);
 }
 
 .logo-word {
@@ -313,7 +330,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   background: var(--surface);
   color: var(--text);
   font-family: var(--font-ui);
-  font-size: max(16px, 13px); /* prevents iOS zoom */
+  font-size: max(16px, 13px);
   outline: none;
   transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
@@ -367,6 +384,8 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   flex-shrink: 0;
   transition: color 0.18s, background 0.18s, border-color 0.18s, transform 0.15s;
   -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
 }
 .tab-btn:hover:not(.active) { color: var(--text2); border-color: var(--text3); }
 .tab-btn:active { transform: scale(0.94); }
@@ -430,22 +449,21 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   height: 234px;
   flex-shrink: 0;
   margin: 4px auto 0;
-  /* No pointer-events on outer wrapper — let children handle */
 }
 
-/* Platter base (the spinning disc body) */
+/* Platter base */
 .platter-base {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   width: 224px; height: 224px;
   border-radius: 50%;
-  background: radial-gradient(circle at 38% 28%, var(--platter-rim) 0%, var(--platter-bg) 55%, #060402 100%);
+  background: radial-gradient(circle at 38% 28%, var(--platter-rim) 0%, var(--platter-bg) 55%, #020100 100%);
   box-shadow:
-    0 6px 28px rgba(0,0,0,0.85),
-    0 2px 6px rgba(0,0,0,0.7),
-    inset 0 1px 0 rgba(232,160,32,0.05),
-    inset 0 -2px 4px rgba(0,0,0,0.5);
+    0 8px 32px rgba(0,0,0,0.95),
+    0 2px 8px rgba(0,0,0,0.8),
+    inset 0 1px 0 rgba(232,160,32,0.04),
+    inset 0 -2px 6px rgba(0,0,0,0.7);
   z-index: 1;
 }
 
@@ -454,11 +472,11 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   border-radius: 50%;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  border: 1px solid rgba(232,160,32,0.06);
+  border: 1px solid rgba(232,160,32,0.05);
 }
-.platter-ring.r1 { width: 96%; height: 96%; border-color: rgba(232,160,32,0.08); }
+.platter-ring.r1 { width: 96%; height: 96%; border-color: rgba(232,160,32,0.07); }
 .platter-ring.r2 { width: 84%; height: 84%; }
-.platter-ring.r3 { width: 70%; height: 70%; border-color: rgba(232,160,32,0.04); }
+.platter-ring.r3 { width: 70%; height: 70%; border-color: rgba(232,160,32,0.03); }
 
 .platter-felt {
   position: absolute;
@@ -466,8 +484,8 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   transform: translate(-50%, -50%);
   width: 68%; height: 68%;
   border-radius: 50%;
-  background: radial-gradient(circle at 42% 34%, #222018 0%, var(--felt-color) 55%, #0A0800 100%);
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+  background: radial-gradient(circle at 42% 34%, #1A1810 0%, var(--felt-color) 55%, #060402 100%);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.7);
 }
 
 /* Vinyl wrapper */
@@ -479,7 +497,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   z-index: 3;
 }
 
-/* Glow ring when playing */
+/* Glow ring */
 .vinyl-glow {
   position: absolute;
   inset: -14px;
@@ -491,9 +509,9 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
 .vinyl-glow.active {
   opacity: 1;
   box-shadow:
-    0 0 36px 6px var(--amber-glow),
-    0 0 70px 20px rgba(232,160,32,0.12),
-    0 0 110px 36px rgba(232,160,32,0.05);
+    0 0 40px 8px var(--amber-glow),
+    0 0 80px 24px rgba(232,160,32,0.10),
+    0 0 120px 40px rgba(232,160,32,0.04);
 }
 
 /* Vinyl disc */
@@ -501,28 +519,28 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   width: 206px; height: 206px;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 33% 24%, rgba(232,160,32,0.025) 0%, transparent 38%),
+    radial-gradient(circle at 33% 24%, rgba(232,160,32,0.02) 0%, transparent 38%),
     radial-gradient(circle at 50% 50%, var(--vinyl-mid) 0%, var(--vinyl-outer) 100%);
   position: relative;
   box-shadow:
-    0 8px 36px rgba(0,0,0,0.92),
-    0 2px 8px rgba(0,0,0,0.75),
-    inset 0 1px 0 rgba(232,160,32,0.04);
+    0 10px 40px rgba(0,0,0,0.98),
+    0 2px 8px rgba(0,0,0,0.85),
+    inset 0 1px 0 rgba(232,160,32,0.03);
   will-change: transform;
   overflow: hidden;
 }
 
-/* Vinyl grooves — the signature vinyl look */
+/* Vinyl grooves */
 .vinyl-grooves {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   background: repeating-radial-gradient(
     circle at 50% 50%,
-    transparent 0px, transparent 2.6px,
-    rgba(232,160,32,0.015) 2.6px, rgba(232,160,32,0.015) 3px,
-    transparent 3px, transparent 4px,
-    rgba(255,255,255,0.008) 4px, rgba(255,255,255,0.008) 4.3px
+    transparent 0px, transparent 2.4px,
+    rgba(232,160,32,0.012) 2.4px, rgba(232,160,32,0.012) 2.8px,
+    transparent 2.8px, transparent 3.8px,
+    rgba(255,255,255,0.006) 3.8px, rgba(255,255,255,0.006) 4.1px
   );
 }
 
@@ -531,7 +549,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(ellipse at 28% 22%, rgba(255,255,255,0.045) 0%, transparent 52%);
+  background: radial-gradient(ellipse at 28% 22%, rgba(255,255,255,0.040) 0%, transparent 52%);
   pointer-events: none;
 }
 
@@ -545,7 +563,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   background: var(--label-bg);
   overflow: hidden;
   z-index: 2;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(232,160,32,0.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(232,160,32,0.07);
 }
 .vinyl-label img {
   width: 100%; height: 100%;
@@ -557,7 +575,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1.5px solid rgba(232,160,32,0.10);
+  border: 1.5px solid rgba(232,160,32,0.09);
   pointer-events: none;
 }
 
@@ -573,8 +591,8 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   transition: border-color 0.6s, box-shadow 0.6s;
 }
 .vinyl-disk.spinning::after {
-  border-color: rgba(232,160,32,0.18);
-  box-shadow: inset 0 0 18px rgba(232,160,32,0.04);
+  border-color: rgba(232,160,32,0.15);
+  box-shadow: inset 0 0 20px rgba(232,160,32,0.03);
 }
 
 /* Spindle */
@@ -584,10 +602,10 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   transform: translate(-50%, -50%);
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #5A4828, #1A1408);
-  border: 1px solid rgba(232,160,32,0.20);
+  background: radial-gradient(circle at 35% 30%, #4A3820, #100C04);
+  border: 1px solid rgba(232,160,32,0.18);
   z-index: 5;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.9);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.98);
 }
 
 /* Vinyl spin animation */
@@ -603,7 +621,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   border-radius: 50%;
   border: 2px solid transparent;
   border-top-color: var(--amber);
-  border-right-color: rgba(232,160,32,0.28);
+  border-right-color: rgba(232,160,32,0.25);
   opacity: 0;
   z-index: 8;
   pointer-events: none;
@@ -628,7 +646,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   z-index: 2;
 }
 
-/* Arm hint tooltip */
+/* Arm hint */
 .arm-hint {
   position: absolute;
   bottom: 4px; left: 50%;
@@ -646,7 +664,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   transition: opacity 0.4s;
   white-space: nowrap;
   z-index: 2;
-  background: rgba(12,10,4,0.6);
+  background: rgba(6,4,2,0.75);
   padding: 3px 9px;
   border-radius: 20px;
   backdrop-filter: blur(4px);
@@ -656,7 +674,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
 
 
 /* ─────────────────────────────────────────────────────
-   9. TONEARM
+   9. TONEARM — S-CURVE SVG
 ───────────────────────────────────────────────────── */
 .arm-pivot {
   position: absolute;
@@ -671,9 +689,11 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   transform: translate(-50%, -50%);
   width: 26px; height: 26px;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 28%, var(--surface4), #080604);
+  background: radial-gradient(circle at 36% 28%, var(--surface4), #040200);
   border: 1px solid var(--border3);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.85), inset 0 1px 0 rgba(232,160,32,0.07);
+  box-shadow:
+    0 5px 14px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(232,160,32,0.06);
   z-index: 1;
 }
 
@@ -683,13 +703,12 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   transform: translate(-50%, -50%);
   width: 9px; height: 9px;
   border-radius: 50%;
-  background: radial-gradient(circle at 36% 28%, #5A4828, #1A1408);
-  border: 1px solid rgba(232,160,32,0.18);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.85);
+  background: radial-gradient(circle at 36% 28%, #4A3820, #100C04);
+  border: 1px solid rgba(232,160,32,0.20);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.98);
   z-index: 3;
 }
 
-/* The actual draggable arm */
 .tonearm {
   position: absolute;
   top: 13px; left: 13px;
@@ -703,64 +722,17 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
 }
 .tonearm:active { cursor: grabbing; }
 
-.arm-counterweight {
-  position: absolute;
-  top: -16px; left: -4px;
-  width: 10px; height: 16px;
-  border-radius: 3px;
-  background: radial-gradient(circle at 38% 28%, var(--surface4), #140E04);
-  border: 1px solid var(--border2);
-  box-shadow: 0 2px 7px rgba(0,0,0,0.65);
+.arm-svg {
+  width: 32px;
+  height: 172px;
+  overflow: visible;
+  display: block;
+  transform: translate(-16px, 0px);
 }
 
-.arm-shaft {
-  position: absolute;
-  top: 0; left: -2px;
-  width: 4px;
-  height: 148px; /* fixed height — not dependent on container */
-  background: linear-gradient(
-    to right,
-    rgba(232,160,32,0.04) 0%,
-    rgba(232,160,32,0.20) 38%,
-    rgba(232,160,32,0.10) 65%,
-    rgba(232,160,32,0.03) 100%
-  );
-  border-radius: 2px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.5);
-}
-
-.arm-head {
-  position: absolute;
-  bottom: 0; left: -10px;
-  width: 24px; height: 11px;
-  background: linear-gradient(135deg, var(--surface3), #141008);
-  border-radius: 4px 4px 2px 2px;
-  border: 1px solid var(--border2);
-  box-shadow: 0 3px 9px rgba(0,0,0,0.75);
-}
-
-.cartridge {
-  position: absolute;
-  bottom: 2px; left: 50%;
-  transform: translateX(-50%);
-  width: 13px; height: 4px;
-  background: linear-gradient(90deg, #282010, #342C18);
-  border-radius: 2px;
-  border: 1px solid rgba(232,160,32,0.07);
-}
-
-.needle {
-  position: absolute;
-  bottom: -8px; left: 50%;
-  transform: translateX(-50%);
-  width: 2px; height: 9px;
-  background: linear-gradient(to bottom, var(--text3), rgba(60,48,24,0.3));
-  border-radius: 0 0 1px 1px;
-  transition: background 0.35s, box-shadow 0.35s;
-}
-.needle.on {
-  background: linear-gradient(to bottom, var(--amber), rgba(232,160,32,0.4));
-  box-shadow: 0 0 7px var(--amber-glow), 0 2px 4px rgba(232,160,32,0.35);
+.tonearm.needle-on #needleLine {
+  stroke: var(--amber);
+  filter: drop-shadow(0 0 3px var(--amber-glow));
 }
 
 
@@ -863,7 +835,6 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
 .more-btn:hover { color: var(--text); transform: scale(1.08); }
 .more-btn:active { transform: scale(0.90); }
 
-/* Retro pill button (speed) */
 .pill-btn {
   display: inline-flex;
   align-items: center;
@@ -915,17 +886,15 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
 }
 
 .progress-fill {
-  position: absolute; /* 🔥 KEY FIX */
+  position: absolute;
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  
   height: 3px;
   border-radius: 3px;
   background: linear-gradient(90deg, var(--amber) 0%, var(--amber-light) 100%);
-  
   pointer-events: none;
-  box-shadow: 0 0 6px rgba(232,160,32,0.38);
+  box-shadow: 0 0 7px rgba(232,160,32,0.40);
 }
 
 .progress-thumb {
@@ -936,7 +905,7 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   width: 12px; height: 12px;
   border-radius: 50%;
   background: var(--amber);
-  box-shadow: 0 0 0 3px var(--amber-glow), 0 2px 7px rgba(0,0,0,0.55);
+  box-shadow: 0 0 0 3px var(--amber-glow), 0 2px 7px rgba(0,0,0,0.65);
   opacity: 0;
   transition: opacity 0.2s, transform 0.15s;
   pointer-events: none;
@@ -990,14 +959,12 @@ button { cursor: pointer; font-family: var(--font-ui); border: none; background:
   border-color: var(--amber-glow);
 }
 
-/* Smaller mode buttons */
 .ctrl-mode {
   width: 34px; height: 34px;
   background: transparent;
 }
 .ctrl-mode:hover { background: var(--surface); }
 
-/* Play/Pause — the centrepiece */
 .play-btn {
   width: 56px !important;
   height: 56px !important;
@@ -1170,7 +1137,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 
 .song-list { padding: 0 8px 12px; }
 
-/* Search group heading */
 .search-group-lbl {
   font-family: var(--font-mono);
   font-size: 9px;
@@ -1204,7 +1170,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 .song-item.active .si-title { color: var(--amber); }
 .song-item.pressing { background: var(--amber-soft); transform: scale(0.984); }
 
-/* Album art thumbnail */
 .si-thumb {
   width: 42px; height: 42px;
   border-radius: 9px;
@@ -1221,11 +1186,10 @@ input[type="range"].vol-slider::-moz-range-thumb {
 }
 .song-item:hover .si-thumb img { transform: scale(1.06); }
 
-/* EQ overlay when playing */
 .si-playing {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.54);
+  background: rgba(0,0,0,0.58);
   display: none;
   align-items: center;
   justify-content: center;
@@ -1244,7 +1208,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 .eq-bar:nth-child(3) { animation-delay: 0.32s; }
 .song-item.active.paused .eq-bar { animation-play-state: paused; height: 4px; }
 
-/* Song text info */
 .si-info { flex: 1; min-width: 0; }
 .si-title {
   font-size: 12.5px;
@@ -1264,11 +1227,9 @@ input[type="range"].vol-slider::-moz-range-thumb {
   text-overflow: ellipsis;
 }
 
-/* Right side meta */
 .si-right { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
 .si-dur { font-family: var(--font-mono); font-size: 10px; color: var(--text3); min-width: 28px; text-align: right; }
 
-/* Liked indicator dot */
 .si-liked-dot {
   width: 4px; height: 4px;
   border-radius: 50%;
@@ -1278,7 +1239,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 }
 .song-item[data-liked="true"] .si-liked-dot { display: block; }
 
-/* Three-dot menu button */
 .si-menu-btn {
   width: 30px; height: 30px;
   border-radius: 50%;
@@ -1291,7 +1251,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 }
 .si-menu-btn:hover { background: var(--surface2); color: var(--text); }
 
-/* Empty state */
 .empty-state {
   text-align: center;
   padding: 28px 16px;
@@ -1312,7 +1271,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
   gap: 10px;
 }
 
-/* Create card */
 .playlist-create-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1360,7 +1318,18 @@ input[type="range"].vol-slider::-moz-range-thumb {
 .pl-primary-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 16px var(--amber-glow); }
 .pl-primary-btn:active { transform: scale(0.95); }
 
-/* Playlist cards list */
+/* ── Playlist section headers (Global / Your Playlists) ── */
+.playlist-section-hdr {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 4px 2px 6px;
+  margin-top: 2px;
+}
+
 .playlist-list { display: flex; flex-direction: column; gap: 7px; }
 
 .playlist-card {
@@ -1382,7 +1351,25 @@ input[type="range"].vol-slider::-moz-range-thumb {
   border-color: var(--amber-glow);
   background: var(--amber-soft);
 }
+
+/* Global playlist card — blue-tinted border */
+.playlist-card.global {
+  border-color: var(--global-border);
+  background: var(--global-bg);
+}
+.playlist-card.global.active {
+  border-color: var(--global-color);
+  box-shadow: 0 0 0 2px rgba(100,180,255,0.15);
+}
+.playlist-card.global:hover { border-color: var(--global-color); }
+
 .playlist-card-main { flex: 1; min-width: 0; }
+.playlist-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
 .playlist-card-title {
   font-size: 13px;
   font-weight: 700;
@@ -1406,13 +1393,28 @@ input[type="range"].vol-slider::-moz-range-thumb {
 }
 .playlist-icon-btn:hover { background: var(--surface2); color: var(--text); }
 
-/* Playlist detail panel */
+/* ── Global badge pill ── */
+.global-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: var(--global-bg);
+  color: var(--global-color);
+  border: 1px solid var(--global-border);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .playlist-detail {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   padding: 13px;
-  /* Ensure it never collapses weirdly */
   min-height: 60px;
 }
 
@@ -1422,6 +1424,12 @@ input[type="range"].vol-slider::-moz-range-thumb {
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.playlist-detail-title-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   flex-wrap: wrap;
 }
 .playlist-detail-title {
@@ -1448,7 +1456,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 
 .playlist-detail-list { display: flex; flex-direction: column; gap: 2px; }
 
-/* Empty card (used in playlists) */
 .empty-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -1459,6 +1466,13 @@ input[type="range"].vol-slider::-moz-range-thumb {
 }
 .empty-card .em-ico { font-size: 28px; display: block; margin-bottom: 6px; }
 .empty-card p { margin-top: 4px; font-size: 11.5px; line-height: 1.6; }
+
+/* Global playlist sheet items — disabled/read-only */
+.pl-sheet-global {
+  opacity: 0.60;
+  cursor: not-allowed !important;
+}
+.pl-sheet-global:hover { background: var(--surface2) !important; color: var(--text) !important; border-color: var(--border) !important; }
 
 
 /* ─────────────────────────────────────────────────────
@@ -1551,10 +1565,14 @@ input[type="range"].vol-slider::-moz-range-thumb {
   z-index: 201;
   padding: 10px 16px 30px;
   transition: transform 0.38s var(--ease-out);
-  box-shadow: 0 -8px 36px rgba(0,0,0,0.40);
   border-top: 1px solid var(--border2);
 }
-.bottom-sheet.open { transform: translateX(-50%) translateY(0); }
+
+.bottom-sheet.open {
+  transform: translateX(-50%) translateY(0);
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.55);
+}
+
 
 .sheet-handle {
   width: 34px; height: 4px;
@@ -1593,6 +1611,7 @@ input[type="range"].vol-slider::-moz-range-thumb {
   transition: all 0.18s;
   text-align: center;
   -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-mono);
 }
 .sheet-opt:hover { background: var(--amber-soft); border-color: var(--amber-glow); color: var(--amber); }
 .sheet-opt:active { transform: scale(0.95); }
@@ -1603,7 +1622,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
   box-shadow: 0 2px 9px var(--amber-glow);
 }
 
-/* Playlist sheet list */
 .pl-sheet-list { display: flex; flex-direction: column; gap: 6px; }
 .pl-sheet-item {
   padding: 10px 13px;
@@ -1617,12 +1635,14 @@ input[type="range"].vol-slider::-moz-range-thumb {
   transition: all 0.18s;
   text-align: left;
   -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 .pl-sheet-item:hover { background: var(--amber-soft); border-color: var(--amber-glow); color: var(--amber); }
 .pl-sheet-item:active { transform: scale(0.98); }
 .pl-sheet-item.active { background: var(--amber); color: var(--bg); border-color: var(--amber); box-shadow: 0 2px 9px var(--amber-glow); }
 
-/* Sleep countdown */
 .sleep-cd {
   font-family: var(--font-mono);
   font-size: 26px;
@@ -1656,23 +1676,7 @@ input[type="range"].vol-slider::-moz-range-thumb {
 /* ─────────────────────────────────────────────────────
    20. ABOUT PANEL
 ───────────────────────────────────────────────────── */
-
 #aboutPanel {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.3s ease;
-}
-
-#aboutPanel.active {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.about-panel {
   position: absolute;
   inset: 0;
   z-index: 100;
@@ -1683,8 +1687,18 @@ input[type="range"].vol-slider::-moz-range-thumb {
   transition: transform 0.45s var(--ease-out);
   scrollbar-width: thin;
   scrollbar-color: var(--surface3) transparent;
+  border-radius: inherit;
+  display: none;
 }
-.about-panel.open { transform: translateY(0); }
+
+#aboutPanel.active {
+  display: block;
+}
+
+#aboutPanel.open {
+  transform: translateY(0);
+}
+
 .about-panel::-webkit-scrollbar { width: 3px; }
 .about-panel::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
 
@@ -1817,7 +1831,7 @@ input[type="range"].vol-slider::-moz-range-thumb {
   background: var(--surface2);
   border: 1px solid var(--border2);
   border-radius: 14px;
-  box-shadow: 0 12px 44px rgba(0,0,0,0.55);
+  box-shadow: 0 14px 50px rgba(0,0,0,0.70);
   overflow: hidden;
   z-index: 9999;
   min-width: 180px;
@@ -1846,7 +1860,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 .ctx-item svg { stroke: var(--text2); transition: stroke 0.12s; flex-shrink: 0; }
 .ctx-item:not(:last-child) { border-bottom: 1px solid var(--border); }
 
-/* Sleep/center notices */
 .center-notice {
   position: absolute;
   inset: 0;
@@ -1886,7 +1899,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 }
 .notice-text { margin-top: 7px; font-size: 13px; line-height: 1.55; color: var(--text); }
 
-/* KBD hint */
 .kbd-hint {
   position: absolute;
   bottom: 7px; left: 50%;
@@ -1903,7 +1915,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 }
 .frame:hover .kbd-hint { opacity: 0.35; }
 
-/* Misc */
 .no-select { user-select: none; -webkit-user-select: none; }
 
 
@@ -1944,7 +1955,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
 
 /* ─────────────────────────────────────────────────────
    23. RESPONSIVE BREAKPOINTS
-   Strategy: mobile-first, scale up cleanly
 ───────────────────────────────────────────────────── */
 
 /* ── Full-bleed on very small phones (< 380px) ─────── */
@@ -1961,12 +1971,13 @@ input[type="range"].vol-slider::-moz-range-thumb {
   .buf-ring { width: 192px; height: 192px; }
   .platter-base { width: 204px; height: 204px; }
   .vinyl-label { width: 72px; height: 72px; }
-  .arm-shaft { height: 130px; }
   .meta-title { font-size: 16px; }
   .play-btn { width: 50px !important; height: 50px !important; }
   .ctrl-btn { width: 36px; height: 36px; }
   .ctrl-mode { width: 30px; height: 30px; }
   #view-player { padding: 0 10px 10px; }
+  .controls { gap: 5px; }
+  .action-row { gap: 7px; }
 }
 
 /* ── Standard mobile (380–479px) ─────────────────────── */
@@ -1981,17 +1992,16 @@ input[type="range"].vol-slider::-moz-range-thumb {
   }
 }
 
-/* ── Short phones (height < 680px, any width) ─────── */
-@media (max-height: 680px) and (max-width: 479px) {
+/* ── Short phones (height < 700px, any width ≤ 479px) ── */
+@media (max-height: 700px) and (max-width: 479px) {
   .turntable { height: 196px; max-width: 266px; }
   .vinyl-wrap, .vinyl-disk { width: 186px; height: 186px; }
   .buf-ring { width: 192px; height: 192px; }
   .platter-base { width: 204px; height: 204px; }
   .vinyl-label { width: 74px; height: 74px; }
-  .arm-shaft { height: 132px; }
-  .song-meta { margin-top: 6px; }
+  .song-meta { margin-top: 5px; }
   .meta-title { font-size: 16px; }
-  .action-row { margin-top: 4px; }
+  .action-row { margin-top: 3px; }
   .progress-wrap { margin-top: 5px; }
   .controls { margin-top: 5px; gap: 5px; }
   .vol-row { margin-top: 5px; }
@@ -2001,20 +2011,23 @@ input[type="range"].vol-slider::-moz-range-thumb {
 
 /* ── Very short phones (height < 580px) ────────────── */
 @media (max-height: 580px) and (max-width: 479px) {
-  .turntable { height: 170px; max-width: 234px; }
-  .vinyl-wrap, .vinyl-disk { width: 162px; height: 162px; }
-  .buf-ring { width: 168px; height: 168px; }
-  .platter-base { width: 178px; height: 178px; }
-  .vinyl-label { width: 64px; height: 64px; }
-  .arm-shaft { height: 115px; }
+  .turntable { height: 168px; max-width: 232px; }
+  .vinyl-wrap, .vinyl-disk { width: 158px; height: 158px; }
+  .buf-ring { width: 164px; height: 164px; }
+  .platter-base { width: 174px; height: 174px; }
+  .vinyl-label { width: 62px; height: 62px; }
   .arm-pivot { top: 3px; right: 5px; }
+  .progress-wrap { margin-top: 3px; }
+  .vol-row { margin-top: 3px; }
+  .controls { margin-top: 3px; }
+  .action-row { margin-top: 2px; }
 }
 
 /* ── Tablet portrait (480–767px) ─────────────────────── */
 @media (min-width: 480px) and (max-width: 767px) {
   #app { padding: 12px; }
   .frame {
-    max-width: 450px;
+    max-width: 460px;
     height: min(880px, calc(100dvh - 24px));
     border-radius: 30px;
   }
@@ -2023,7 +2036,7 @@ input[type="range"].vol-slider::-moz-range-thumb {
   .buf-ring { width: 230px; height: 230px; }
   .platter-base { width: 244px; height: 244px; }
   .vinyl-label { width: 88px; height: 88px; }
-  .arm-shaft { height: 160px; }
+  .meta-title { font-size: 21px; }
 }
 
 /* ── Desktop / tablet landscape (768px+) ─────────────── */
@@ -2035,7 +2048,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
     border-radius: 22px;
   }
 
-  /* Two-column layout for player view */
   #view-player {
     display: grid;
     grid-template-columns: 270px 1fr;
@@ -2066,7 +2078,6 @@ input[type="range"].vol-slider::-moz-range-thumb {
   .buf-ring { width: 244px; height: 244px; }
   .platter-base { width: 258px; height: 258px; }
   .vinyl-label { width: 94px; height: 94px; }
-  .arm-shaft { height: 168px; }
   .arm-pivot { top: 8px; right: 8px; }
 
   .song-meta    { grid-area: meta; text-align: left; margin-top: 0; align-self: end; }
@@ -2078,6 +2089,22 @@ input[type="range"].vol-slider::-moz-range-thumb {
   .queue-drawer { grid-area: q; }
   .meta-title   { font-size: 20px; }
   .meta-artist  { font-size: 13px; }
+
+  /* Playlist view — side-by-side on wide screens */
+  #view-playlist .playlist-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "create  detail"
+      "list    detail";
+    column-gap: 14px;
+    align-items: start;
+    padding: 0 14px 20px;
+  }
+  #view-playlist .playlist-create-card { grid-area: create; }
+  #view-playlist .playlist-list        { grid-area: list; }
+  #view-playlist .playlist-detail      { grid-area: detail; }
 }
 
 /* ── Large desktop (1200px+) ──────────────────────────── */
@@ -2098,8 +2125,19 @@ input[type="range"].vol-slider::-moz-range-thumb {
   .buf-ring { width: 270px; height: 270px; }
   .platter-base { width: 286px; height: 286px; }
   .vinyl-label { width: 104px; height: 104px; }
-  .arm-shaft { height: 188px; }
   .meta-title { font-size: 23px; }
+}
+
+/* ── Ultra-wide (1440px+) ─────────────────────────────── */
+@media (min-width: 1440px) {
+  .frame { max-width: 1040px; }
+  #view-player { grid-template-columns: 320px 1fr; column-gap: 52px; }
+  .turntable { width: 320px; height: 320px; max-width: 320px; }
+  .vinyl-wrap, .vinyl-disk { width: 282px; height: 282px; }
+  .buf-ring { width: 288px; height: 288px; }
+  .platter-base { width: 304px; height: 304px; }
+  .vinyl-label { width: 112px; height: 112px; }
+  .meta-title { font-size: 25px; }
 }
 
 /* ── Touch: remove hover states that look broken ─────── */
