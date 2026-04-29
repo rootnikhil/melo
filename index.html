@@ -74,19 +74,73 @@
               <div class="vinyl-spindle"></div>
             </div>
           </div>
-          <!-- Tonearm -->
+
+          <!-- ══ S-CURVE TONEARM (SVG-based) ══ -->
           <div class="arm-pivot" id="armPivot">
             <div class="pivot-base"></div>
             <div class="pivot-knob"></div>
+            <!-- The arm rotates around this pivot. SVG draws the S-curve. -->
             <div class="tonearm" id="tonearm">
-              <div class="arm-counterweight"></div>
-              <div class="arm-shaft"></div>
-              <div class="arm-head">
-                <div class="cartridge"></div>
-                <div class="needle" id="needle"></div>
-              </div>
+              <svg class="arm-svg" id="armSvg" viewBox="0 0 32 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Counterweight -->
+                <rect x="9" y="0" width="14" height="22" rx="4"
+                      fill="url(#cwGrad)" stroke="rgba(232,160,32,0.25)" stroke-width="0.8"/>
+                <!-- Collar between counterweight and shaft -->
+                <rect x="12" y="20" width="8" height="5" rx="2"
+                      fill="url(#collarGrad)" stroke="rgba(232,160,32,0.18)" stroke-width="0.6"/>
+                <!-- S-curve arm shaft path -->
+                <path id="armPath"
+                      d="M16,25 C16,40 22,52 22,70 C22,88 10,100 10,118 C10,130 14,138 16,148"
+                      stroke="url(#armGrad)" stroke-width="3.5" stroke-linecap="round"
+                      fill="none" filter="url(#armShadow)"/>
+                <!-- Highlight on arm -->
+                <path d="M17,26 C17,40 22.5,52 22.5,70 C22.5,87 10.5,99 10.5,118"
+                      stroke="rgba(255,255,255,0.10)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+                <!-- Headshell -->
+                <rect x="9" y="146" width="14" height="8" rx="3"
+                      fill="url(#headGrad)" stroke="rgba(232,160,32,0.20)" stroke-width="0.7"/>
+                <!-- Cartridge body -->
+                <rect x="10.5" y="152" width="11" height="5" rx="2"
+                      fill="url(#cartGrad)" stroke="rgba(232,160,32,0.12)" stroke-width="0.5"/>
+                <!-- Needle -->
+                <line id="needleLine" x1="16" y1="157" x2="16" y2="164"
+                      stroke="#6A5A38" stroke-width="1.4" stroke-linecap="round"/>
+
+                <defs>
+                  <linearGradient id="cwGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#2E2820"/>
+                    <stop offset="40%" stop-color="#4A4030"/>
+                    <stop offset="100%" stop-color="#1A1610"/>
+                  </linearGradient>
+                  <linearGradient id="collarGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#222018"/>
+                    <stop offset="50%" stop-color="#3A3428"/>
+                    <stop offset="100%" stop-color="#181410"/>
+                  </linearGradient>
+                  <linearGradient id="armGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#1A1610"/>
+                    <stop offset="35%" stop-color="#E8A020" stop-opacity="0.55"/>
+                    <stop offset="65%" stop-color="#C09030" stop-opacity="0.40"/>
+                    <stop offset="100%" stop-color="#141008"/>
+                  </linearGradient>
+                  <linearGradient id="headGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#262018"/>
+                    <stop offset="50%" stop-color="#3C3428"/>
+                    <stop offset="100%" stop-color="#1C1810"/>
+                  </linearGradient>
+                  <linearGradient id="cartGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#1A1610"/>
+                    <stop offset="50%" stop-color="#2E2820"/>
+                    <stop offset="100%" stop-color="#141008"/>
+                  </linearGradient>
+                  <filter id="armShadow" x="-50%" y="-10%" width="200%" height="120%">
+                    <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.7)"/>
+                  </filter>
+                </defs>
+              </svg>
             </div>
           </div>
+
           <!-- Buffering indicator -->
           <div class="buf-ring" id="bufRing"></div>
           <!-- Arm hint -->
@@ -128,11 +182,9 @@
         <div class="progress-wrap">
           <div class="progress-track" id="progressTrack">
             <div class="progress-bg"></div>
-
             <div class="progress-fill" id="progressFill" style="width:0%">
               <div class="progress-thumb" id="progressThumb"></div>
             </div>
-
           </div>
           <div class="time-row">
             <span id="currentTime">0:00</span>
@@ -217,7 +269,6 @@
           <div class="list-cnt" id="playlistCount"></div>
         </div>
         <div class="playlist-shell">
-          <!-- Create new playlist -->
           <div class="playlist-create-card">
             <div class="playlist-create-title">New Playlist</div>
             <p class="playlist-create-sub">Curate your collection.</p>
@@ -229,9 +280,7 @@
               </button>
             </div>
           </div>
-          <!-- Playlist cards -->
           <div class="playlist-list" id="playlistList"></div>
-          <!-- Playlist detail -->
           <div class="playlist-detail" id="playlistDetail"></div>
         </div>
       </div>
@@ -259,6 +308,97 @@
 
     <!-- ══ KBD HINT ═══════════════════════════════════════ -->
     <div class="kbd-hint">Space · ←→ seek · Shift+←→ skip · ↑↓ vol · L like · M mute · F search</div>
+
+    <!-- About Panel -->
+<div class="about-panel" id="aboutPanel" role="dialog" aria-label="About Melo">
+  <div class="about-inner">
+
+    <button class="about-close" id="aboutClose" aria-label="Close about panel">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="about-hero">
+      <div class="about-logo-big">M<em>elo</em></div>
+      <div class="about-ver">Version 2.2.0</div>
+      <p class="about-tagline">Not built for skipping.</p>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-sec">
+      <div class="about-sec-label">About the App</div>
+      <p class="about-txt">
+        Melo is designed around presence. Instead of fast taps and endless skipping,
+        it brings back the physical rhythm of listening — drop the needle, let it play,
+        and stay with the track.
+      </p>
+      <p class="about-txt">
+        Most music players optimise for speed. Melo does the opposite — it slows things down,
+        removes noise, and makes listening feel intentional again.
+      </p>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-sec">
+      <div class="about-sec-label">Why Melo exists</div>
+      <p class="about-txt">
+        Modern music apps are built for speed — search, skip, repeat.
+        That makes music feel disposable.
+      </p>
+      <p class="about-txt">
+        Melo focuses on the opposite idea: stay with the song, not the algorithm.
+      </p>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-sec">
+      <div class="about-sec-label">What makes it different</div>
+      <p class="about-txt">
+        Melo isn't just visual — it's interactive. You don't just press play,
+        you drop the tonearm. The vinyl spins. Playback feels like an action,
+        not a button press.
+      </p>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-sec">
+      <div class="about-sec-label">Built By</div>
+      <div class="about-dev">
+        <div class="about-dev-av">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <div>
+          <div class="about-dev-name">rootnikhil</div>
+          <div class="about-dev-bio">
+            Focused on clean UI, interaction design, and building things from scratch without heavy frameworks.
+          </div>
+        </div>
+      </div>
+
+      <div class="about-tags">
+        <span class="about-tag-pill">HTML5</span>
+        <span class="about-tag-pill">CSS3</span>
+        <span class="about-tag-pill">Vanilla JS</span>
+        <span class="about-tag-pill">Web Audio</span>
+        <span class="about-tag-pill">LocalStorage</span>
+      </div>
+    </div>
+
+    <div class="about-divider"></div>
+
+    <div class="about-footer">
+      <div>© <span id="aboutYear"></span> Melo</div>
+      <div>Built for listening, not skipping.</div>
+    </div>
 
   </div><!-- /frame -->
 </div><!-- /app -->
@@ -315,99 +455,7 @@
   <div class="pl-sheet-list" id="playlistSheetList"></div>
 </div>
 
-<!-- About Panel -->
-<div class="about-panel" id="aboutPanel" role="dialog" aria-label="About Melo">
-  <div class="about-inner">
 
-    <button class="about-close" id="aboutClose" aria-label="Close about panel">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-
-    <div class="about-hero">
-      <div class="about-logo-big">M<em>elo</em></div>
-      <div class="about-ver">Version 2.2.0</div>
-      <p class="about-tagline">Not built for skipping.</p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">About the App</div>
-      <p class="about-txt">
-        Melo is designed around presence. Instead of fast taps and endless skipping,
-        it brings back the physical rhythm of listening — drop the needle, let it play,
-        and stay with the track.
-      </p>
-      <p class="about-txt">
-        Most music players optimise for speed. Melo does the opposite — it slows things down,
-        removes noise, and makes listening feel intentional again.
-      </p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">Why Melo exists</div>
-      <p class="about-txt">
-        Modern music apps are built for speed — search, skip, repeat.
-        That makes music feel disposable.
-      </p>
-      <p class="about-txt">
-        Melo focuses on the opposite idea: stay with the song, not the algorithm.
-      </p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">What makes it different</div>
-      <p class="about-txt">
-        Melo isn’t just visual — it’s interactive. You don’t just press play,
-        you drop the tonearm. The vinyl spins. Playback feels like an action,
-        not a button press.
-      </p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">Built By</div>
-      <div class="about-dev">
-        <div class="about-dev-av">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <polyline points="16 18 22 12 16 6"/>
-            <polyline points="8 6 2 12 8 18"/>
-          </svg>
-        </div>
-        <div>
-          <div class="about-dev-name">rootnikhil</div>
-          <div class="about-dev-bio">
-            Focused on clean UI, interaction design, and building things from scratch without heavy frameworks.
-          </div>
-        </div>
-      </div>
-
-      <div class="about-tags">
-        <span class="about-tag-pill">HTML5</span>
-        <span class="about-tag-pill">CSS3</span>
-        <span class="about-tag-pill">Vanilla JS</span>
-        <span class="about-tag-pill">Web Audio</span>
-        <span class="about-tag-pill">LocalStorage</span>
-      </div>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-footer">
-      <div>© <span id="aboutYear"></span> Melo</div>
-      <div>Built for listening, not skipping.</div>
-    </div>
-
-  </div>
-</div>
 
 <!-- Sleep Notice -->
 <div class="center-notice" id="sleepNotice" role="alert">
@@ -443,12 +491,5 @@
 <audio id="audioPlayer" preload="metadata"></audio>
 
 <script src="script.js"></script>
-<div id="aboutPanel">
-  <div class="about-content">
-    <button id="aboutClose">✕</button>
-    <h2>About Melo</h2>
-    <p>This is your retro music player.</p>
-  </div>
-</div>
 </body>
 </html>
