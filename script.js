@@ -1597,13 +1597,26 @@ function scrubTo(e) {
   miniProgressFill.style.width = `${rt * 100}%`;
 }
 
-progressTrack.addEventListener("mousedown",  e => { _scrubbing = true; progressTrack.classList.add("dragging"); scrubTo(e); });
-progressTrack.addEventListener("touchstart", e => { _scrubbing = true; progressTrack.classList.add("dragging"); scrubTo(e); }, { passive: true });
+function startScrub(e) {
+  _scrubbing = true;
+  audio.muted = true;
+  progressTrack.classList.add("dragging");
+  scrubTo(e);
+}
+
+function endScrub() {
+  if (!_scrubbing) return;
+  _scrubbing = false;
+  audio.muted = false;
+  progressTrack.classList.remove("dragging");
+}
+
+progressTrack.addEventListener("mousedown",  e => startScrub(e));
+progressTrack.addEventListener("touchstart", e => startScrub(e), { passive: true });
 document.addEventListener("mousemove",  e => { if (_scrubbing) scrubTo(e); });
 document.addEventListener("touchmove",  e => { if (_scrubbing) scrubTo(e); }, { passive: true });
-document.addEventListener("mouseup",    () => { _scrubbing = false; progressTrack.classList.remove("dragging"); });
-document.addEventListener("touchend",   () => { _scrubbing = false; progressTrack.classList.remove("dragging"); });
-
+document.addEventListener("mouseup",    endScrub);
+document.addEventListener("touchend",   endScrub);
 
 /* ─────────────────────────────────────────────────────
    19. CONTROLS & BUTTON EVENTS
