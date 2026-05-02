@@ -55,7 +55,7 @@ const SONGS = [
   { id:22, title:"Tere Ishq Ne",                artist:"Jyoti Nooran",                                             cover:"images/cover7.jpg", src:"audio/song22.mp3" },
   { id:23, title:"Hum Pyaar Karne Wale",                artist:"Anuradha Paudwal, Udit Narayan, Qveen Herby",                                             cover:"images/cover7.jpg", src:"audio/song23.mp3" },
   { id:24, title:"Kanhaiyya",                artist:"Jubin Nautiyal",                                             cover:"images/cover7.jpg", src:"audio/song24.mp3" },
-  
+  { id:25,  title:"Ve Maahi",                    artist:"Arijit Singh, Asees Kaur, Tanishk Bagchi",                                              cover:"images/cover12.jpg",  src:"audio/song25.mp3"  },
 ];
 
 const TABS = [
