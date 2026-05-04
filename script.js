@@ -56,6 +56,11 @@ const SONGS = [
   { id:23, title:"Hum Pyaar Karne Wale",                artist:"Anuradha Paudwal, Udit Narayan, Qveen Herby",                                             cover:"images/cover7.jpg", src:"audio/song23.mp3" },
   { id:24, title:"Kanhaiyya",                artist:"Jubin Nautiyal",                                             cover:"images/cover7.jpg", src:"audio/song24.mp3" },
   { id:25,  title:"Ve Maahi",                    artist:"Arijit Singh, Asees Kaur, Tanishk Bagchi",                                              cover:"images/cover12.jpg",  src:"audio/song25.mp3"  },
+  { id:26,  title:"Rasputin",                    artist:"Browny M.",                                              cover:"images/cover13.jpg",  src:"audio/song26.mp3"  },
+  { id:27,  title:"Ik Kudi",                    artist:"wolf.cryman, Arpit Bala",                                              cover:"images/cover14.jpg",  src:"audio/song27.mp3"  },
+  { id:28,  title:"I Think They Call This Love",                    artist:"Matthew Ifield",                                              cover:"images/cover15.jpg",  src:"audio/song28.mp3"  },
+  { id:29,  title:"O Meri Laila",                    artist:"Atif Aslam, Jyotica Tangri",                                              cover:"images/cover16.jpg",  src:"audio/song29.mp3"  },
+  { id:30,  title:"Ham Tere Pyar Mein",                    artist:"Lata Mangeshkar",                                              cover:"images/cover17.jpg",  src:"audio/song30.mp3"  },
 ];
 
 const TABS = [
