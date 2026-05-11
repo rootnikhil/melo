@@ -1,32 +1,3 @@
-/* ═══════════════════════════════════════════════════════
-   MELO — RETRO PLAYER  |  script.js
-   ─────────────────────────────────────────────────────
-   Section map:
-   1.  Song data & constants
-   2.  App state
-   3.  DOM references
-   4.  Helper functions
-   5.  Tonearm (drag system + groove sweep)
-   6.  Playback core
-   7.  Queue logic
-   8.  UI update functions
-   9.  Persistence (localStorage)
-   10. Rendering functions
-   11. Playlist actions
-   12. Tabs & views
-   13. Context menu
-   14. Sleep timer
-   15. Playback speed
-   16. Likes & recently played
-   17. Audio events
-   18. Progress bar scrubbing
-   19. Controls & button events
-   20. Search
-   21. Keyboard shortcuts
-   22. Initialisation
-═══════════════════════════════════════════════════════ */
-
-
 /* ─────────────────────────────────────────────────────
    1. SONG DATA & CONSTANTS
 ───────────────────────────────────────────────────── */
