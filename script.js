@@ -1,58 +1,93 @@
-/* ─────────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════
+
+   TABLE OF CONTENTS
+   ─────────────────
+   1.  SONG DATA & CONSTANTS
+   2.  GLOBAL PLAYLISTS (read-only)
+   3.  TONEARM ANGLE CONSTANTS
+   4.  APP STATE
+   5.  DOM REFERENCES
+   6.  HELPER FUNCTIONS
+   7.  TONEARM — DRAG SYSTEM + GROOVE SWEEP
+   8.  PLAYBACK CORE
+   9.  QUEUE LOGIC
+   10. UI UPDATE FUNCTIONS
+   11. PERSISTENCE (localStorage)
+   12. RENDERING FUNCTIONS
+   13. PLAYLIST ACTIONS
+   14. TABS & VIEWS
+   15. CONTEXT MENU
+   16. SLEEP TIMER
+   17. PLAYBACK SPEED
+   18. LIKES & RECENTLY PLAYED
+   19. AUDIO EVENTS
+   20. PROGRESS BAR SCRUBBING
+   21. CONTROLS & BUTTON EVENTS
+   22. SEARCH
+   23. KEYBOARD SHORTCUTS
+   24. INITIALISATION
+
+═══════════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════════════
    1. SONG DATA & CONSTANTS
-───────────────────────────────────────────────────── */
+═══════════════════════════════════════════════════════════════ */
 const SONGS = [
-  { id:1,  title:"Khat",                    artist:"Navjot Ahuja",                                              cover:"images/cover1.jpg",  src:"audio/song1.mp3"  },
-  { id:2,  title:"Sajde",                   artist:"Faheem Abdullah, Hazaif Nazar",                             cover:"images/cover2.jpg",  src:"audio/song2.mp3"  },
-  { id:3,  title:"Piya Ghar Aavenge",       artist:"Kailash Kher, Paresh Kamath, Naresh Kamath",               cover:"images/cover3.jpg",  src:"audio/song3.mp3"  },
-  { id:4,  title:"Maharani",                artist:"Karun, Lambo Drive, Arpit Bala, GHILDIYAL",                cover:"images/cover4.jpg",  src:"audio/song4.mp3"  },
-  { id:5,  title:"Main Rahoon Ya Na Rahoon",artist:"Amaal Mallik, Armaan Mallik, Rashmi Virag",                cover:"images/cover5.jpg",  src:"audio/song5.mp3"  },
-  { id:6,  title:"Ishq Sufiyana",           artist:"Vishal Shekhar, Kamal Khan",                               cover:"images/cover6.jpg",  src:"audio/song6.mp3"  },
-  { id:7,  title:"Vaari Jaavan",            artist:"Shashwat Sachdev, Jyoti Nooran, Jasmine Sandlas, Reble",  cover:"images/cover7.jpg",  src:"audio/song7.mp3"  },
-  { id:8,  title:"Bairan",                  artist:"Banjaare",                                                 cover:"images/cover8.jpg",  src:"audio/song8.mp3"  },
-  { id:9,  title:"Do Pal",                  artist:"Madan Mohan, Lata Mangeshkar, Sonu Nigam, Javed Akhtar",  cover:"images/cover9.jpg",  src:"audio/song9.mp3"  },
-  { id:10, title:"Maand",                   artist:"Bayaan, Hasan Raheem, Rovalio",                            cover:"images/cover10.jpg", src:"audio/song10.mp3" },
-  { id:11, title:"Babydoll",                artist:"Dominic Fike",                                             cover:"images/cover11.jpg", src:"audio/song11.mp3" },
-  { id:12, title:"Dhurandhar the Revenge - Aari Aari",                artist:"Bombay Rockers,Shashwat Sachdev,Khan Saab,Jasmine Sandlas,Sudhir Yaduvanshi",                                             cover:"images/cover7.jpg", src:"audio/song12.mp3" },
-  { id:13, title:"Main Aur Tu",                artist:"Jasmine Sandlas, Reble, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song13.mp3" },
-  { id:14, title:"Jaan Se Guzarte Hain",                artist:"Khan Saab, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song14.mp3" },
-  { id:15, title:"Aakhri Ishq ",                artist:"Jubin Nautiyal",                                             cover:"images/cover7.jpg", src:"audio/song15.mp3" },
-  { id:16, title:"Wild Ride",                artist:"Ellisar, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song16.mp3" },
-  { id:17, title:"Phir Se",                artist:"Arijit Singh",                                             cover:"images/cover7.jpg", src:"audio/song17.mp3" },
-  { id:18, title:"Didi (Sher-E-Baloch)",                artist:"Nabil El Houri, Shashwat Sachdev, Sons of Yusuf",                                             cover:"images/cover7.jpg", src:"audio/song18.mp3" },
-  { id:19, title:"Destiny - Mann Atkeya",                artist:"Vaibhav Gupta, Shahzad Ali, Token, Shashwat Sachdev",                                             cover:"images/cover7.jpg", src:"audio/song19.mp3" },
-  { id:20, title:"Rang De Lal (Oye Oye)",                artist:"Jasmine Sandlas, Afsana Khan, Amit Kumar, Reble, Sapna Mukherjee",                                             cover:"images/cover7.jpg", src:"audio/song20.mp3" },
-  { id:21, title:"Jaiye Sajana",                artist:"Jasmine Sandlas, Satinder Sartaaj",                                             cover:"images/cover7.jpg", src:"audio/song21.mp3" },
-  { id:22, title:"Tere Ishq Ne",                artist:"Jyoti Nooran",                                             cover:"images/cover7.jpg", src:"audio/song22.mp3" },
-  { id:23, title:"Hum Pyaar Karne Wale",                artist:"Anuradha Paudwal, Udit Narayan, Qveen Herby",                                             cover:"images/cover7.jpg", src:"audio/song23.mp3" },
-  { id:24, title:"Kanhaiyya",                artist:"Jubin Nautiyal",                                             cover:"images/cover7.jpg", src:"audio/song24.mp3" },
-  { id:25,  title:"Ve Maahi",                    artist:"Arijit Singh, Asees Kaur, Tanishk Bagchi",                                              cover:"images/cover12.jpg",  src:"audio/song25.mp3"  },
-  { id:26,  title:"Rasputin",                    artist:"Browny M.",                                              cover:"images/cover13.jpg",  src:"audio/song26.mp3"  },
-  { id:27,  title:"Ik Kudi",                    artist:"wolf.cryman, Arpit Bala",                                              cover:"images/cover14.jpg",  src:"audio/song27.mp3"  },
-  { id:28,  title:"I Think They Call This Love",                    artist:"Matthew Ifield",                                              cover:"images/cover15.jpg",  src:"audio/song28.mp3"  },
-  { id:29,  title:"O Meri Laila",                    artist:"Atif Aslam, Jyotica Tangri",                                              cover:"images/cover16.jpg",  src:"audio/song29.mp3"  },
-  { id:30,  title:"Ham Tere Pyar Mein",                    artist:"Lata Mangeshkar",                                              cover:"images/cover17.jpg",  src:"audio/song30.mp3"  },
+  { id: 1,  title: "Khat",                          artist: "Navjot Ahuja",                                                                    cover: "images/cover1.jpg",  src: "audio/song1.mp3"  },
+  { id: 2,  title: "Sajde",                         artist: "Faheem Abdullah, Hazaif Nazar",                                                   cover: "images/cover2.jpg",  src: "audio/song2.mp3"  },
+  { id: 3,  title: "Piya Ghar Aavenge",             artist: "Kailash Kher, Paresh Kamath, Naresh Kamath",                                     cover: "images/cover3.jpg",  src: "audio/song3.mp3"  },
+  { id: 4,  title: "Maharani",                      artist: "Karun, Lambo Drive, Arpit Bala, GHILDIYAL",                                      cover: "images/cover4.jpg",  src: "audio/song4.mp3"  },
+  { id: 5,  title: "Main Rahoon Ya Na Rahoon",      artist: "Amaal Mallik, Armaan Mallik, Rashmi Virag",                                      cover: "images/cover5.jpg",  src: "audio/song5.mp3"  },
+  { id: 6,  title: "Ishq Sufiyana",                 artist: "Vishal Shekhar, Kamal Khan",                                                     cover: "images/cover6.jpg",  src: "audio/song6.mp3"  },
+  { id: 7,  title: "Vaari Jaavan",                  artist: "Shashwat Sachdev, Jyoti Nooran, Jasmine Sandlas, Reble",                         cover: "images/cover7.jpg",  src: "audio/song7.mp3"  },
+  { id: 8,  title: "Bairan",                        artist: "Banjaare",                                                                        cover: "images/cover8.jpg",  src: "audio/song8.mp3"  },
+  { id: 9,  title: "Do Pal",                        artist: "Madan Mohan, Lata Mangeshkar, Sonu Nigam, Javed Akhtar",                         cover: "images/cover9.jpg",  src: "audio/song9.mp3"  },
+  { id: 10, title: "Maand",                         artist: "Bayaan, Hasan Raheem, Rovalio",                                                  cover: "images/cover10.jpg", src: "audio/song10.mp3" },
+  { id: 11, title: "Babydoll",                      artist: "Dominic Fike",                                                                   cover: "images/cover11.jpg", src: "audio/song11.mp3" },
+  { id: 12, title: "Dhurandhar the Revenge - Aari Aari", artist: "Bombay Rockers, Shashwat Sachdev, Khan Saab, Jasmine Sandlas, Sudhir Yaduvanshi", cover: "images/cover7.jpg",  src: "audio/song12.mp3" },
+  { id: 13, title: "Main Aur Tu",                   artist: "Jasmine Sandlas, Reble, Shashwat Sachdev",                                       cover: "images/cover7.jpg",  src: "audio/song13.mp3" },
+  { id: 14, title: "Jaan Se Guzarte Hain",          artist: "Khan Saab, Shashwat Sachdev",                                                    cover: "images/cover7.jpg",  src: "audio/song14.mp3" },
+  { id: 15, title: "Aakhri Ishq",                   artist: "Jubin Nautiyal",                                                                  cover: "images/cover7.jpg",  src: "audio/song15.mp3" },
+  { id: 16, title: "Wild Ride",                     artist: "Ellisar, Shashwat Sachdev",                                                       cover: "images/cover7.jpg",  src: "audio/song16.mp3" },
+  { id: 17, title: "Phir Se",                       artist: "Arijit Singh",                                                                   cover: "images/cover7.jpg",  src: "audio/song17.mp3" },
+  { id: 18, title: "Didi (Sher-E-Baloch)",          artist: "Nabil El Houri, Shashwat Sachdev, Sons of Yusuf",                                cover: "images/cover7.jpg",  src: "audio/song18.mp3" },
+  { id: 19, title: "Destiny - Mann Atkeya",         artist: "Vaibhav Gupta, Shahzad Ali, Token, Shashwat Sachdev",                            cover: "images/cover7.jpg",  src: "audio/song19.mp3" },
+  { id: 20, title: "Rang De Lal (Oye Oye)",         artist: "Jasmine Sandlas, Afsana Khan, Amit Kumar, Reble, Sapna Mukherjee",               cover: "images/cover7.jpg",  src: "audio/song20.mp3" },
+  { id: 21, title: "Jaiye Sajana",                  artist: "Jasmine Sandlas, Satinder Sartaaj",                                              cover: "images/cover7.jpg",  src: "audio/song21.mp3" },
+  { id: 22, title: "Tere Ishq Ne",                  artist: "Jyoti Nooran",                                                                   cover: "images/cover7.jpg",  src: "audio/song22.mp3" },
+  { id: 23, title: "Hum Pyaar Karne Wale",          artist: "Anuradha Paudwal, Udit Narayan, Qveen Herby",                                    cover: "images/cover7.jpg",  src: "audio/song23.mp3" },
+  { id: 24, title: "Kanhaiyya",                     artist: "Jubin Nautiyal",                                                                  cover: "images/cover7.jpg",  src: "audio/song24.mp3" },
+  { id: 25, title: "Ve Maahi",                      artist: "Arijit Singh, Asees Kaur, Tanishk Bagchi",                                       cover: "images/cover12.jpg", src: "audio/song25.mp3" },
+  { id: 26, title: "Rasputin",                      artist: "Browny M.",                                                                      cover: "images/cover13.jpg", src: "audio/song26.mp3" },
+  { id: 27, title: "Ik Kudi",                       artist: "wolf.cryman, Arpit Bala",                                                        cover: "images/cover14.jpg", src: "audio/song27.mp3" },
+  { id: 28, title: "I Think They Call This Love",   artist: "Matthew Ifield",                                                                 cover: "images/cover15.jpg", src: "audio/song28.mp3" },
+  { id: 29, title: "O Meri Laila",                  artist: "Atif Aslam, Jyotica Tangri",                                                     cover: "images/cover16.jpg", src: "audio/song29.mp3" },
+  { id: 30, title: "Ham Tere Pyar Mein",            artist: "Lata Mangeshkar",                                                                cover: "images/cover17.jpg", src: "audio/song30.mp3" },
 ];
 
 const TABS = [
-  { id:"player",   label:"Now Playing" },
-  { id:"songs",    label:"Library"     },
-  { id:"liked",    label:"Liked"       },
-  { id:"recent",   label:"Recent"      },
-  { id:"playlist", label:"Playlist"    },
+  { id: "player",   label: "Now Playing" },
+  { id: "songs",    label: "Library"     },
+  { id: "liked",    label: "Liked"       },
+  { id: "recent",   label: "Recent"      },
+  { id: "playlist", label: "Playlist"    },
 ];
 
-const ALL_SONG_IDS = SONGS.map(s => s.id);
+const ALL_SONG_IDS    = SONGS.map(s => s.id);
+const REPEAT_MODES    = ["off", "all", "one"];
+const REPEAT_LABELS   = { off: "Repeat Off", all: "Repeat All", one: "Repeat One" };
 
-const REPEAT_MODES  = ["off", "all", "one"];
-const REPEAT_LABELS = { off: "Repeat Off", all: "Repeat All", one: "Repeat One" };
 
-/* ─────────────────────────────────────────────────────
-   GLOBAL PLAYLISTS — read-only, not stored in localStorage
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   2. GLOBAL PLAYLISTS (read-only — never written to localStorage)
+═══════════════════════════════════════════════════════════════ */
 const GLOBAL_PLAYLISTS = [
-  { id: "g-dhurandhar-1",   name: "Dhurandhar the Revenge",   songIds: [12 ,13 ,14 ,15 ,16 ,7 ,17 ,18 ,19 ,20 ,21 ,22 ,23 ,24 ]  },
-  
+  {
+    id: "g-dhurandhar-1",
+    name: "Dhurandhar the Revenge",
+    songIds: [12, 13, 14, 15, 16, 7, 17, 18, 19, 20, 21, 22, 23, 24],
+  },
 ];
 
 function isGlobalPlaylist(id) {
@@ -63,20 +98,22 @@ function getAllPlaylists() {
   return [...GLOBAL_PLAYLISTS, ...state.playlists];
 }
 
-/* ─────────────────────────────────────────────────────
-   TONEARM ANGLE CONSTANTS
-───────────────────────────────────────────────────── */
-const ARM_REST   =  60;
-const ARM_PLAY   =  95;
-const ARM_MAX    = 128;
-const ARM_THRESH =  80;
-const ARM_DELAY  = 150;
+
+/* ═══════════════════════════════════════════════════════════════
+   3. TONEARM ANGLE CONSTANTS (degrees)
+═══════════════════════════════════════════════════════════════ */
+const ARM_REST   =  60;   // parked position
+const ARM_PLAY   =  95;   // start of groove
+const ARM_MAX    = 128;   // end of groove
+const ARM_THRESH =  80;   // threshold to detect "on record"
+const ARM_DELAY  = 150;   // ms delay before auto-playing after drop
 
 
-/* ─────────────────────────────────────────────────────
-   2. APP STATE
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   4. APP STATE
+═══════════════════════════════════════════════════════════════ */
 const state = {
+  /* Playback */
   currentIndex:           0,
   isPlaying:              false,
   hasLoadedSong:          false,
@@ -86,27 +123,31 @@ const state = {
   volume:                 0.8,
   playbackSpeed:          1,
 
+  /* Queue */
   currentQueueSongIds:    [...ALL_SONG_IDS],
   currentQueueType:       "all",
   currentQueueLabel:      "All Songs",
   currentQueuePlaylistId: null,
   playNextQueue:          [],
 
+  /* Collections */
   liked:                  new Set(),
   recentlyPlayed:         [],
-  playlists:              [],          // user playlists only — globals never go here
+  playlists:              [],       // user playlists only
   selectedPlaylistId:     null,
 
+  /* UI */
   activeTab:              "player",
   ctxSongId:              null,
   searchQuery:            "",
   queueOpen:              false,
 
+  /* Sleep timer */
   sleepTimer:             null,
   sleepEndTime:           null,
   sleepCountdownInterval: null,
 
-  // Tonearm
+  /* Tonearm drag */
   armAngle:               ARM_REST,
   armDragging:            false,
   armOnRecord:            false,
@@ -115,11 +156,14 @@ const state = {
 };
 
 
-/* ─────────────────────────────────────────────────────
-   3. DOM REFERENCES
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   5. DOM REFERENCES
+═══════════════════════════════════════════════════════════════ */
+
+/* Audio */
 const audio = document.getElementById("audioPlayer");
 
+/* Turntable elements */
 const vinylDisk  = document.getElementById("vinylDisk");
 const vinylGlow  = document.getElementById("vinylGlow");
 const vinylArt   = document.getElementById("vinylArt");
@@ -129,6 +173,7 @@ const needleLine = document.getElementById("needleLine");
 const bufRing    = document.getElementById("bufRing");
 const armHint    = document.getElementById("armHint");
 
+/* Song info & progress */
 const songTitle        = document.getElementById("songTitle");
 const songArtist       = document.getElementById("songArtist");
 const songContextLabel = document.getElementById("songContextLabel");
@@ -136,18 +181,21 @@ const progressTrack    = document.getElementById("progressTrack");
 const progressFill     = document.getElementById("progressFill");
 const currentTimeEl    = document.getElementById("currentTime");
 const totalTimeEl      = document.getElementById("totalTime");
-const playBtn          = document.getElementById("playBtn");
-const playIcon         = document.getElementById("playIcon");
-const prevBtn          = document.getElementById("prevBtn");
-const nextBtn          = document.getElementById("nextBtn");
-const shuffleBtn       = document.getElementById("shuffleBtn");
-const repeatBtn        = document.getElementById("repeatBtn");
-const repeatIcon       = document.getElementById("repeatIcon");
-const volSlider        = document.getElementById("volSlider");
-const playerLikeBtn    = document.getElementById("playerLikeBtn");
-const playerMoreBtn    = document.getElementById("playerMoreBtn");
-const speedBtn         = document.getElementById("speedBtn");
 
+/* Playback controls */
+const playBtn       = document.getElementById("playBtn");
+const playIcon      = document.getElementById("playIcon");
+const prevBtn       = document.getElementById("prevBtn");
+const nextBtn       = document.getElementById("nextBtn");
+const shuffleBtn    = document.getElementById("shuffleBtn");
+const repeatBtn     = document.getElementById("repeatBtn");
+const repeatIcon    = document.getElementById("repeatIcon");
+const volSlider     = document.getElementById("volSlider");
+const playerLikeBtn = document.getElementById("playerLikeBtn");
+const playerMoreBtn = document.getElementById("playerMoreBtn");
+const speedBtn      = document.getElementById("speedBtn");
+
+/* List views */
 const songList          = document.getElementById("songList");
 const likedList         = document.getElementById("likedList");
 const recentList        = document.getElementById("recentList");
@@ -155,6 +203,7 @@ const searchResultsList = document.getElementById("searchResultsList");
 const playlistList      = document.getElementById("playlistList");
 const playlistDetail    = document.getElementById("playlistDetail");
 
+/* Mini player */
 const miniPlayer       = document.getElementById("miniPlayer");
 const mpImg            = document.getElementById("mpImg");
 const mpTitle          = document.getElementById("mpTitle");
@@ -165,34 +214,44 @@ const mpNextBtn        = document.getElementById("mpNextBtn");
 const mpIcon           = document.getElementById("mpIcon");
 const miniProgressFill = document.getElementById("miniProgressFill");
 
+/* Context menu */
 const ctxMenu          = document.getElementById("ctxMenu");
 const ctxPlayNext      = document.getElementById("ctxPlayNext");
 const ctxAddToPlaylist = document.getElementById("ctxAddToPlaylist");
 const ctxDownload      = document.getElementById("ctxDownload");
 
-const toast            = document.getElementById("toast");
-const searchInput      = document.getElementById("searchInput");
-const searchClearBtn   = document.getElementById("searchClearBtn");
-const themeToggle      = document.getElementById("themeToggle");
-const meloLogo         = document.getElementById("meloLogo");
-const aboutPanel       = document.getElementById("aboutPanel");
-const aboutClose       = document.getElementById("aboutClose");
+/* Search */
+const searchInput    = document.getElementById("searchInput");
+const searchClearBtn = document.getElementById("searchClearBtn");
 
-const queueToggleBtn   = document.getElementById("queueToggleBtn");
-const queueDrawer      = document.getElementById("queueDrawer");
-const queueInner       = document.getElementById("queueInner");
+/* Theme & about */
+const themeToggle = document.getElementById("themeToggle");
+const meloLogo    = document.getElementById("meloLogo");
+const aboutPanel  = document.getElementById("aboutPanel");
+const aboutClose  = document.getElementById("aboutClose");
 
-const sleepTimerBtn    = document.getElementById("sleepTimerBtn");
-const sleepPanel       = document.getElementById("sleepPanel");
-const sleepOverlay     = document.getElementById("sleepOverlay");
-const sleepCountdown   = document.getElementById("sleepCountdown");
-const sleepCancelBtn   = document.getElementById("sleepCancelBtn");
-const sleepNotice      = document.getElementById("sleepNotice");
-const sleepNoticeText  = document.getElementById("sleepNoticeText");
+/* Toast */
+const toast = document.getElementById("toast");
 
-const speedPanel       = document.getElementById("speedPanel");
-const speedOverlay     = document.getElementById("speedOverlay");
+/* Queue */
+const queueToggleBtn = document.getElementById("queueToggleBtn");
+const queueDrawer    = document.getElementById("queueDrawer");
+const queueInner     = document.getElementById("queueInner");
 
+/* Sleep timer */
+const sleepTimerBtn  = document.getElementById("sleepTimerBtn");
+const sleepPanel     = document.getElementById("sleepPanel");
+const sleepOverlay   = document.getElementById("sleepOverlay");
+const sleepCountdown = document.getElementById("sleepCountdown");
+const sleepCancelBtn = document.getElementById("sleepCancelBtn");
+const sleepNotice    = document.getElementById("sleepNotice");
+const sleepNoticeText = document.getElementById("sleepNoticeText");
+
+/* Speed sheet */
+const speedPanel   = document.getElementById("speedPanel");
+const speedOverlay = document.getElementById("speedOverlay");
+
+/* Playlist sheet */
 const playlistOverlay     = document.getElementById("playlistOverlay");
 const playlistPanel       = document.getElementById("playlistPanel");
 const playlistSheetHelper = document.getElementById("playlistSheetHelper");
@@ -200,14 +259,16 @@ const playlistSheetList   = document.getElementById("playlistSheetList");
 const playlistNameInput   = document.getElementById("playlistNameInput");
 const createPlaylistBtn   = document.getElementById("createPlaylistBtn");
 
+/* Set copyright year in About panel */
 document.getElementById("aboutYear").textContent = new Date().getFullYear();
 
 
-/* ─────────────────────────────────────────────────────
-   4. HELPER FUNCTIONS
-───────────────────────────────────────────────────── */
-const getSongById     = id  => SONGS.find(s => s.id === id) || null;
-const getPlaylistById = id  => getAllPlaylists().find(p => p.id === id) || null;
+/* ═══════════════════════════════════════════════════════════════
+   6. HELPER FUNCTIONS
+═══════════════════════════════════════════════════════════════ */
+
+const getSongById     = id => SONGS.find(s => s.id === id) || null;
+const getPlaylistById = id => getAllPlaylists().find(p => p.id === id) || null;
 const currentSong     = ()  => SONGS[state.currentIndex] || SONGS[0];
 
 function formatTime(sec) {
@@ -235,9 +296,10 @@ function showArmHint(show) {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   5. TONEARM — DRAG SYSTEM + GROOVE SWEEP
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   7. TONEARM — DRAG SYSTEM + GROOVE SWEEP
+═══════════════════════════════════════════════════════════════ */
+
 function getPivotCenter() {
   const r = armPivot.getBoundingClientRect();
   return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
@@ -268,16 +330,17 @@ function snapArm(angle) {
   renderArm(angle, true);
 }
 
+/* Groove sweep: moves arm as song progresses */
 function tickGrooveSweep() {
   if (!state.isPlaying || state.armDragging) {
     state.grooveSweepRaf = null;
     return;
   }
   if (audio.duration && audio.duration > 0) {
-    const progress = Math.max(0, Math.min(1, audio.currentTime / audio.duration));
+    const progress    = Math.max(0, Math.min(1, audio.currentTime / audio.duration));
     const targetAngle = ARM_PLAY + (ARM_MAX - ARM_PLAY) * progress;
     tonearm.style.transition = "none";
-    tonearm.style.transform = `rotate(${targetAngle - 90}deg)`;
+    tonearm.style.transform  = `rotate(${targetAngle - 90}deg)`;
     state.armAngle = targetAngle;
   }
   state.grooveSweepRaf = requestAnimationFrame(tickGrooveSweep);
@@ -298,7 +361,6 @@ function stopGrooveSweep() {
 function setArmOnRecord(isOn) {
   if (isOn === state.armOnRecord) return;
   state.armOnRecord = isOn;
-
   clearTimeout(state.armDropTimeout);
   state.armDropTimeout = null;
 
@@ -312,6 +374,7 @@ function setArmOnRecord(isOn) {
   }
 }
 
+/* Drag start */
 function startArmDrag(e) {
   stopGrooveSweep();
   state.armDragging = true;
@@ -339,6 +402,7 @@ function onArmTouch(e) {
   setArmOnRecord(isArmOnRecord(a));
 }
 
+/* Drag end — snap to play position or rest */
 function endArmDrag() {
   state.armDragging = false;
   window.removeEventListener("mousemove", onArmMove);
@@ -362,6 +426,7 @@ function endArmDrag() {
 tonearm.addEventListener("mousedown",  startArmDrag);
 tonearm.addEventListener("touchstart", e => startArmDrag(e.touches[0]), { passive: false });
 
+/* Programmatic arm movement */
 function armGoPlay() {
   state.armOnRecord = true;
   if (audio.duration > 0) {
@@ -381,9 +446,10 @@ function armGoRest() {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   6. PLAYBACK CORE
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   8. PLAYBACK CORE
+═══════════════════════════════════════════════════════════════ */
+
 function startPlayback() {
   if (state.isPlaying || !state.hasLoadedSong) return;
 
@@ -417,9 +483,9 @@ function stopPlayback() {
 function stopPlaybackAtStart() {
   stopPlayback();
   audio.currentTime = 0;
-  progressFill.style.width = "0%";
+  progressFill.style.width     = "0%";
   miniProgressFill.style.width = "0%";
-  currentTimeEl.textContent = "0:00";
+  currentTimeEl.textContent    = "0:00";
   armGoRest();
   _savePlayerState();
 }
@@ -442,9 +508,9 @@ function loadSong(index, autoplay = false) {
   const song = SONGS[index];
   if (!song) return;
 
-  state.currentIndex = index;
-  state.recentAddedForCurrent = false;
-  state.hasLoadedSong = true;
+  state.currentIndex            = index;
+  state.recentAddedForCurrent   = false;
+  state.hasLoadedSong           = true;
 
   ensureSongInCurrentQueue(song.id);
 
@@ -454,22 +520,23 @@ function loadSong(index, autoplay = false) {
   vinylGlow.classList.remove("active");
   stopGrooveSweep();
 
-  audio.src = song.src;
-  audio.volume = state.volume;
+  audio.src         = song.src;
+  audio.volume      = state.volume;
   audio.playbackRate = state.playbackSpeed;
   audio.load();
 
-  vinylArt.src = song.cover;
-  mpImg.src    = song.cover;
+  /* Update UI */
+  vinylArt.src           = song.cover;
+  mpImg.src              = song.cover;
   songTitle.textContent  = song.title;
   songArtist.textContent = song.artist;
   mpTitle.textContent    = song.title;
   mpArtist.textContent   = song.artist;
 
-  progressFill.style.width = "0%";
+  progressFill.style.width     = "0%";
   miniProgressFill.style.width = "0%";
-  currentTimeEl.textContent = "0:00";
-  totalTimeEl.textContent   = song._duration || "0:00";
+  currentTimeEl.textContent    = "0:00";
+  totalTimeEl.textContent      = song._duration || "0:00";
 
   updateMarquee();
   updateLikeBtn();
@@ -494,6 +561,7 @@ function loadSong(index, autoplay = false) {
 }
 
 function nextSong(fromEnded = false) {
+  /* Play-next override queue */
   if (state.playNextQueue.length) {
     const id  = state.playNextQueue.shift();
     const idx = SONGS.findIndex(s => s.id === id);
@@ -523,10 +591,7 @@ function nextSong(fromEnded = false) {
 
   const isLast = qi >= qIds.length - 1;
   if (isLast) {
-    if (fromEnded && state.repeatMode !== "all") {
-      stopPlaybackAtStart();
-      return;
-    }
+    if (fromEnded && state.repeatMode !== "all") { stopPlaybackAtStart(); return; }
     loadSong(SONGS.findIndex(s => s.id === qIds[0]), true);
     return;
   }
@@ -563,13 +628,12 @@ function playSongFromPlaylist(song, playlistId) {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   7. QUEUE LOGIC
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   9. QUEUE LOGIC
+═══════════════════════════════════════════════════════════════ */
+
 function getNormQueueIds() {
-  const src = state.currentQueueSongIds.length
-    ? state.currentQueueSongIds
-    : ALL_SONG_IDS;
+  const src      = state.currentQueueSongIds.length ? state.currentQueueSongIds : ALL_SONG_IDS;
   const filtered = src.filter(id => getSongById(id));
   if (filtered.length) return filtered;
   return state.currentQueueType === "playlist" ? [] : [...ALL_SONG_IDS];
@@ -617,9 +681,10 @@ function getRandQueueId() {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   8. UI UPDATE FUNCTIONS
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   10. UI UPDATE FUNCTIONS
+═══════════════════════════════════════════════════════════════ */
+
 function updatePlayBtns(playing) {
   const PLAY_PATH  = '<path d="M8 5v14l11-7z"/>';
   const PAUSE_PATH = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
@@ -643,8 +708,8 @@ function updateLikeBtn() {
     return d;
   })();
 
-  const FILLED_HEART = `<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
-  const EMPTY_HEART  = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  const FILLED_HEART = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  const EMPTY_HEART  = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
 
   playerLikeBtn.classList.toggle("liked", isLiked);
   playerLikeBtn.innerHTML = "";
@@ -663,7 +728,7 @@ function updateActiveItems() {
 
 function updateMarquee() {
   requestAnimationFrame(() => {
-    const wrap = songTitle.parentElement;
+    const wrap   = songTitle.parentElement;
     const titleW = songTitle.scrollWidth;
     const wrapW  = wrap.clientWidth;
     if (titleW > wrapW + 4) {
@@ -683,7 +748,7 @@ function updateMiniPlayer() {
 
 function triggerLikeAnim() {
   playerLikeBtn.classList.remove("pop");
-  void playerLikeBtn.offsetWidth;
+  void playerLikeBtn.offsetWidth; // force reflow
   playerLikeBtn.classList.add("pop");
   setTimeout(() => playerLikeBtn.classList.remove("pop"), 500);
 }
@@ -701,16 +766,17 @@ function refreshViews() {
 function updateRepeatBtn() {
   const mode = state.repeatMode;
   repeatBtn.classList.toggle("active", mode !== "off");
-  const BASE = '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>';
-  const ONE_BADGE = '<text x="9.5" y="13.5" font-size="6.5" fill="currentColor" font-family="Outfit" font-weight="bold">1</text>';
+  const BASE      = '<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>';
+  const ONE_BADGE = '<text x="9.5" y="13.5" font-size="6.5" fill="currentColor" font-family="Pixelify Sans" font-weight="bold">1</text>';
   repeatIcon.innerHTML = BASE + (mode === "one" ? ONE_BADGE : "");
 }
 
 
-/* ─────────────────────────────────────────────────────
-   9. PERSISTENCE
-   — global playlists are NEVER written to localStorage
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   11. PERSISTENCE (localStorage)
+   NOTE: Global playlists are NEVER written to localStorage.
+═══════════════════════════════════════════════════════════════ */
+
 function _savePlayerState() {
   localStorage.setItem("melo_player", JSON.stringify({
     index:           state.currentIndex,
@@ -727,31 +793,32 @@ function _savePersist() {
   localStorage.setItem("melo_liked",     JSON.stringify([...state.liked]));
   localStorage.setItem("melo_recent",    JSON.stringify(state.recentlyPlayed));
   localStorage.setItem("melo_volume",    state.volume);
-  // Only save USER playlists — never global ones
-  localStorage.setItem("melo_playlists", JSON.stringify(state.playlists));
+  localStorage.setItem("melo_playlists", JSON.stringify(state.playlists)); // user only
   localStorage.setItem("melo_sel_pl",    state.selectedPlaylistId || "");
 }
 
 function sanitizePlaylists(raw) {
   if (!Array.isArray(raw)) return [];
-  return raw.map((p, i) => ({
-    id:      p.id || `pl-${Date.now()}-${i}`,
-    name:    (typeof p.name === "string" ? p.name.trim() : "") || `Playlist ${i + 1}`,
-    songIds: Array.isArray(p.songIds)
-      ? [...new Set(p.songIds.filter(id => getSongById(id)))]
-      : [],
-  })).filter(p => p.name && !isGlobalPlaylist(p.id)); // extra guard: strip any accidentally stored globals
+  return raw
+    .map((p, i) => ({
+      id:      p.id || `pl-${Date.now()}-${i}`,
+      name:    (typeof p.name === "string" ? p.name.trim() : "") || `Playlist ${i + 1}`,
+      songIds: Array.isArray(p.songIds)
+        ? [...new Set(p.songIds.filter(id => getSongById(id)))]
+        : [],
+    }))
+    .filter(p => p.name && !isGlobalPlaylist(p.id)); // guard against accidentally stored globals
 }
 
 function _loadPersist() {
   try {
-    state.liked    = new Set(JSON.parse(localStorage.getItem("melo_liked")  || "[]"));
+    state.liked          = new Set(JSON.parse(localStorage.getItem("melo_liked")  || "[]"));
     state.recentlyPlayed = JSON.parse(localStorage.getItem("melo_recent") || "[]")
       .filter(id => getSongById(id));
-    state.volume        = parseFloat(localStorage.getItem("melo_volume") || "0.8");
-    state.playbackSpeed = parseFloat(localStorage.getItem("melo_speed")  || "1");
-    state.activeTab     = localStorage.getItem("melo_tab") || "player";
-    state.playlists     = sanitizePlaylists(JSON.parse(localStorage.getItem("melo_playlists") || "[]"));
+    state.volume         = parseFloat(localStorage.getItem("melo_volume") || "0.8");
+    state.playbackSpeed  = parseFloat(localStorage.getItem("melo_speed")  || "1");
+    state.activeTab      = localStorage.getItem("melo_tab") || "player";
+    state.playlists      = sanitizePlaylists(JSON.parse(localStorage.getItem("melo_playlists") || "[]"));
 
     state.selectedPlaylistId = localStorage.getItem("melo_sel_pl") || null;
     if (!getPlaylistById(state.selectedPlaylistId)) {
@@ -808,9 +875,10 @@ function _loadPlayerState() {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   10. RENDERING FUNCTIONS
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   12. RENDERING FUNCTIONS
+═══════════════════════════════════════════════════════════════ */
+
 function renderSongItem(song, { onSelect = () => playSongFromLibrary(song) } = {}) {
   const idx    = SONGS.findIndex(s => s.id === song.id);
   const active = idx === state.currentIndex;
@@ -818,11 +886,8 @@ function renderSongItem(song, { onSelect = () => playSongFromLibrary(song) } = {
   const dur    = song._duration || "–:––";
 
   const el = document.createElement("div");
-  el.className = [
-    "song-item",
-    active ? "active" : "",
-    active && !state.isPlaying ? "paused" : "",
-  ].filter(Boolean).join(" ");
+  el.className = ["song-item", active ? "active" : "", active && !state.isPlaying ? "paused" : ""]
+    .filter(Boolean).join(" ");
 
   el.dataset.id   = song.id;
   el.dataset.idx  = idx;
@@ -847,8 +912,10 @@ function renderSongItem(song, { onSelect = () => playSongFromLibrary(song) } = {
       <div class="si-liked-dot"></div>
       <div class="si-dur">${dur}</div>
       <button class="si-menu-btn" data-id="${song.id}" title="More" aria-label="More options">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="12" cy="5" r="1.2"/>
+          <circle cx="12" cy="12" r="1.2"/>
+          <circle cx="12" cy="19" r="1.2"/>
         </svg>
       </button>
     </div>`;
@@ -857,12 +924,10 @@ function renderSongItem(song, { onSelect = () => playSongFromLibrary(song) } = {
     if (e.target.closest(".si-menu-btn")) return;
     onSelect(song);
   });
-
   el.querySelector(".si-menu-btn").addEventListener("click", e => {
     e.stopPropagation();
     openCtxMenu(e, song.id);
   });
-
   attachLongPress(el, () => openCtxMenuCenter(song.id));
   return el;
 }
@@ -884,13 +949,16 @@ function renderList(songs, container, emptyMsg) {
 }
 
 function renderAll() {
+  /* All Songs */
   renderList(SONGS, songList, "No songs found");
   document.getElementById("songsCount").textContent = `${SONGS.length} songs`;
 
+  /* Liked Songs */
   const liked = SONGS.filter(s => state.liked.has(s.id));
   renderList(liked, likedList, "No liked songs yet");
   document.getElementById("likedCount").textContent = `${liked.length} songs`;
 
+  /* Recently Played */
   const recent = state.recentlyPlayed.map(id => getSongById(id)).filter(Boolean);
   renderList(recent, recentList, "No recently played songs");
   document.getElementById("recentCount").textContent = `${recent.length} songs`;
@@ -900,20 +968,18 @@ function renderSearchResults(q) {
   searchResultsList.innerHTML = "";
   if (!q) return;
 
-  const n       = q.toLowerCase();
+  const n        = q.toLowerCase();
   const byTitle  = SONGS.filter(s => s.title.toLowerCase().includes(n));
   const byArtist = SONGS.filter(s => s.artist.toLowerCase().includes(n) && !byTitle.includes(s));
   const inLiked  = SONGS.filter(s =>
     state.liked.has(s.id) &&
     (s.title.toLowerCase().includes(n) || s.artist.toLowerCase().includes(n))
   );
-  const inRecent = [
-    ...new Set(
-      state.recentlyPlayed
-        .map(id => getSongById(id))
-        .filter(s => s && (s.title.toLowerCase().includes(n) || s.artist.toLowerCase().includes(n)))
-    )
-  ];
+  const inRecent = [...new Set(
+    state.recentlyPlayed
+      .map(id => getSongById(id))
+      .filter(s => s && (s.title.toLowerCase().includes(n) || s.artist.toLowerCase().includes(n)))
+  )];
 
   let any = false;
   const frag = document.createDocumentFragment();
@@ -921,7 +987,7 @@ function renderSearchResults(q) {
   function addGroup(label, arr) {
     if (!arr.length) return;
     const h = document.createElement("div");
-    h.className = "search-group-lbl";
+    h.className  = "search-group-lbl";
     h.textContent = label;
     frag.appendChild(h);
     arr.forEach(s => frag.appendChild(renderSongItem(s)));
@@ -946,7 +1012,7 @@ function renderQueue() {
   queueInner.innerHTML = "";
 
   const lbl = document.createElement("div");
-  lbl.className = "queue-label";
+  lbl.className  = "queue-label";
   lbl.textContent = state.currentQueueType === "playlist" ? "Playlist Queue" : "Up Next";
   queueInner.appendChild(lbl);
 
@@ -956,7 +1022,7 @@ function renderQueue() {
       if (s) queueInner.appendChild(makeQueueItem(s, i + 1, true));
     });
     const sep = document.createElement("div");
-    sep.className = "queue-label";
+    sep.className   = "queue-label";
     sep.style.marginTop = "6px";
     sep.textContent = "Then Playing";
     queueInner.appendChild(sep);
@@ -999,6 +1065,8 @@ function makeQueueItem(song, pos, isPlayNext) {
   return el;
 }
 
+/* ── Playlist rendering ─────────────────────────────── */
+
 function renderPlaylists() {
   const all = getAllPlaylists();
   const cnt = document.getElementById("playlistCount");
@@ -1009,6 +1077,7 @@ function renderPlaylists() {
   }
 
   playlistList.innerHTML = "";
+
   if (!all.length) {
     playlistList.innerHTML = `
       <div class="empty-card">
@@ -1017,30 +1086,22 @@ function renderPlaylists() {
         <p>Then add songs via the three-dot menu.</p>
       </div>`;
   } else {
-    // Section header: Global
-    if (GLOBAL_PLAYLISTS.length) {
-      const ghdr = document.createElement("div");
-      ghdr.className = "playlist-section-hdr";
-      ghdr.textContent = "Global";
-      playlistList.appendChild(ghdr);
-    }
-
     const frag = document.createDocumentFragment();
 
-    // Render global playlists first
-    GLOBAL_PLAYLISTS.forEach(pl => {
-      frag.appendChild(makePlaylistCard(pl, true));
-    });
+    if (GLOBAL_PLAYLISTS.length) {
+      const ghdr = document.createElement("div");
+      ghdr.className  = "playlist-section-hdr";
+      ghdr.textContent = "Global";
+      frag.appendChild(ghdr);
+      GLOBAL_PLAYLISTS.forEach(pl => frag.appendChild(makePlaylistCard(pl, true)));
+    }
 
-    // Section header: Your Playlists (only if user has any)
     if (state.playlists.length) {
       const uhdr = document.createElement("div");
-      uhdr.className = "playlist-section-hdr";
+      uhdr.className  = "playlist-section-hdr";
       uhdr.textContent = "Your Playlists";
       frag.appendChild(uhdr);
-      state.playlists.forEach(pl => {
-        frag.appendChild(makePlaylistCard(pl, false));
-      });
+      state.playlists.forEach(pl => frag.appendChild(makePlaylistCard(pl, false)));
     }
 
     playlistList.appendChild(frag);
@@ -1051,24 +1112,30 @@ function renderPlaylists() {
 
 function makePlaylistCard(pl, isGlobal) {
   const card = document.createElement("div");
-  card.className = `playlist-card${pl.id === state.selectedPlaylistId ? " active" : ""}${isGlobal ? " global" : ""}`;
+  card.className = [
+    "playlist-card",
+    pl.id === state.selectedPlaylistId ? "active" : "",
+    isGlobal ? "global" : "",
+  ].filter(Boolean).join(" ");
 
   card.innerHTML = `
     <div class="playlist-card-main">
       <div class="playlist-card-title-row">
         <div class="playlist-card-title">${pl.name}</div>
-        ${isGlobal ? '<span class="global-badge">Global</span>' : ''}
+        ${isGlobal ? '<span class="global-badge">Global</span>' : ""}
       </div>
       <div class="playlist-card-meta">${pl.songIds.length} song${pl.songIds.length === 1 ? "" : "s"}</div>
     </div>
     <div class="playlist-card-actions">
-      <button class="playlist-icon-btn" data-action="play" title="Play playlist" aria-label="Play playlist">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <button class="playlist-icon-btn" data-action="play" title="Play" aria-label="Play playlist">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
       </button>
       ${!isGlobal ? `
-      <button class="playlist-icon-btn" data-action="del" title="Delete playlist" aria-label="Delete playlist">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
-      </button>` : ''}
+      <button class="playlist-icon-btn" data-action="del" title="Delete" aria-label="Delete playlist">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/>
+        </svg>
+      </button>` : ""}
     </div>`;
 
   card.addEventListener("click", () => {
@@ -1104,7 +1171,7 @@ function renderPlaylistDetail() {
   }
 
   const isGlobal = isGlobalPlaylist(sel.id);
-  const songs = sel.songIds.map(id => getSongById(id)).filter(Boolean);
+  const songs    = sel.songIds.map(id => getSongById(id)).filter(Boolean);
 
   const hdr = document.createElement("div");
   hdr.className = "playlist-detail-header";
@@ -1112,19 +1179,22 @@ function renderPlaylistDetail() {
     <div>
       <div class="playlist-detail-title-row">
         <div class="playlist-detail-title">${sel.name}</div>
-        ${isGlobal ? '<span class="global-badge">Global</span>' : ''}
+        ${isGlobal ? '<span class="global-badge">Global</span>' : ""}
       </div>
-      <div class="playlist-detail-subtitle">${songs.length} song${songs.length === 1 ? "" : "s"}${isGlobal ? " · Read-only" : " — only these will play."}</div>
+      <div class="playlist-detail-subtitle">
+        ${songs.length} song${songs.length === 1 ? "" : "s"}
+        ${isGlobal ? " · Read-only" : " — only these will play."}
+      </div>
     </div>
     <div class="playlist-detail-actions">
       <button class="pl-primary-btn" id="playSelPl">Play</button>
-      ${!isGlobal ? '<button class="pl-secondary-btn" id="delSelPl">Delete</button>' : ''}
+      ${!isGlobal ? '<button class="pl-secondary-btn" id="delSelPl">Delete</button>' : ""}
     </div>`;
   playlistDetail.appendChild(hdr);
 
   hdr.querySelector("#playSelPl").addEventListener("click", () => playPlaylist(sel.id));
   if (!isGlobal) {
-    hdr.querySelector("#delSelPl").addEventListener("click",  () => deletePlaylist(sel.id));
+    hdr.querySelector("#delSelPl").addEventListener("click", () => deletePlaylist(sel.id));
   }
 
   if (!songs.length) {
@@ -1165,7 +1235,7 @@ function renderPlaylistSheet() {
 
   const frag = document.createDocumentFragment();
 
-  // Global playlists shown as read-only in sheet
+  /* Global playlists — shown as read-only */
   GLOBAL_PLAYLISTS.forEach(pl => {
     const isIn = pl.songIds.includes(state.ctxSongId);
     const btn  = document.createElement("button");
@@ -1175,11 +1245,11 @@ function renderPlaylistSheet() {
     frag.appendChild(btn);
   });
 
-  // User playlists — interactive
+  /* User playlists — interactive */
   state.playlists.forEach(pl => {
     const isIn = pl.songIds.includes(state.ctxSongId);
     const btn  = document.createElement("button");
-    btn.className = `pl-sheet-item${isIn ? " active" : ""}`;
+    btn.className  = `pl-sheet-item${isIn ? " active" : ""}`;
     btn.textContent = isIn ? `Remove from ${pl.name}` : `Add to ${pl.name}`;
     btn.addEventListener("click", () => toggleSongInPlaylist(state.ctxSongId, pl.id));
     frag.appendChild(btn);
@@ -1189,9 +1259,10 @@ function renderPlaylistSheet() {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   11. PLAYLIST ACTIONS
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   13. PLAYLIST ACTIONS
+═══════════════════════════════════════════════════════════════ */
+
 function createPlaylist() {
   const name = playlistNameInput.value.trim();
   if (!name) { showToast("Enter a name"); playlistNameInput.focus(); return; }
@@ -1210,12 +1281,7 @@ function createPlaylist() {
 }
 
 function deletePlaylist(id) {
-  // Block deletion of global playlists
-  if (isGlobalPlaylist(id)) {
-    showToast("Global playlists can't be deleted");
-    return;
-  }
-
+  if (isGlobalPlaylist(id)) { showToast("Global playlists can't be deleted"); return; }
   const pl = getPlaylistById(id);
   if (!pl || !confirm(`Delete "${pl.name}"?`)) return;
 
@@ -1234,11 +1300,7 @@ function deletePlaylist(id) {
 }
 
 function toggleSongInPlaylist(songId, plId) {
-  // Block modification of global playlists
-  if (isGlobalPlaylist(plId)) {
-    showToast("Global playlists are read-only");
-    return;
-  }
+  if (isGlobalPlaylist(plId)) { showToast("Global playlists are read-only"); return; }
 
   const pl   = getPlaylistById(plId);
   const song = getSongById(songId);
@@ -1247,7 +1309,6 @@ function toggleSongInPlaylist(songId, plId) {
   const exists = pl.songIds.includes(songId);
   if (exists) {
     pl.songIds = pl.songIds.filter(id => id !== songId);
-
     if (state.currentQueueType === "playlist" && state.currentQueuePlaylistId === plId) {
       usePlaylistQueue(pl);
       if (currentSong().id === songId) {
@@ -1272,7 +1333,6 @@ function playPlaylist(id) {
   state.selectedPlaylistId = pl.id;
   usePlaylistQueue(pl);
   loadSong(SONGS.findIndex(s => s.id === pl.songIds[0]), true);
-  // Only persist selectedPlaylistId for user playlists
   if (!isGlobalPlaylist(id)) _savePersist();
   renderPlaylists();
   switchTab("player");
@@ -1282,9 +1342,10 @@ createPlaylistBtn.addEventListener("click", createPlaylist);
 playlistNameInput.addEventListener("keydown", e => { if (e.key === "Enter") createPlaylist(); });
 
 
-/* ─────────────────────────────────────────────────────
-   12. TABS & VIEWS
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   14. TABS & VIEWS
+═══════════════════════════════════════════════════════════════ */
+
 function renderTabs() {
   const nav = document.getElementById("tabNav");
   nav.innerHTML = "";
@@ -1309,6 +1370,7 @@ function switchTab(tab) {
   state.activeTab = tab;
   localStorage.setItem("melo_tab", tab);
 
+  /* Clear search when switching tabs */
   if (state.searchQuery) {
     searchInput.value = "";
     searchClearBtn.classList.remove("visible");
@@ -1321,16 +1383,17 @@ function switchTab(tab) {
 
   setActiveView(`view-${tab}`);
 
-  if (tab === "playlist") renderPlaylists();
+  if (tab === "playlist")  renderPlaylists();
   if (tab !== "search" && tab !== "player") renderAll();
 
   updateMiniPlayer();
 }
 
 
-/* ─────────────────────────────────────────────────────
-   13. CONTEXT MENU
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   15. CONTEXT MENU
+═══════════════════════════════════════════════════════════════ */
+
 function openCtxMenu(e, songId) {
   state.ctxSongId = songId;
   ctxMenu.classList.add("show");
@@ -1344,11 +1407,11 @@ function openCtxMenuCenter(songId) {
   state.ctxSongId = songId;
   ctxMenu.classList.add("show");
   const r = document.querySelector(".frame").getBoundingClientRect();
-  positionCtxMenu(r.left + r.width / 2 - 90, r.top + r.height / 2 - 65);
+  positionCtxMenu(r.left + r.width / 2 - 85, r.top + r.height / 2 - 60);
 }
 
 function positionCtxMenu(x, y) {
-  const W = 185, H = 165;
+  const W = 175, H = 155;
   ctxMenu.style.left = `${Math.max(8, Math.min(x, window.innerWidth  - W - 8))}px`;
   ctxMenu.style.top  = `${Math.max(8, Math.min(y, window.innerHeight - H - 8))}px`;
 }
@@ -1374,7 +1437,7 @@ ctxDownload.addEventListener("click", () => {
   const s = getSongById(state.ctxSongId);
   if (!s) return;
   const a = document.createElement("a");
-  a.href = s.src;
+  a.href     = s.src;
   a.download = `${s.title}.mp3`;
   document.body.appendChild(a);
   a.click();
@@ -1391,6 +1454,7 @@ document.addEventListener("click", e => {
   ) closeCtxMenu();
 });
 
+/* Playlist sheet open/close */
 function openPlaylistSheet(id) {
   state.ctxSongId = id;
   renderPlaylistSheet();
@@ -1404,9 +1468,10 @@ function closePlaylistSheet() {
 playlistOverlay.addEventListener("click", closePlaylistSheet);
 
 
-/* ─────────────────────────────────────────────────────
-   14. SLEEP TIMER
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   16. SLEEP TIMER
+═══════════════════════════════════════════════════════════════ */
+
 function openSleepSheet()  { sleepPanel.classList.add("open"); sleepOverlay.classList.add("show"); updateSleepUI(); }
 function closeSleepSheet() { sleepPanel.classList.remove("open"); sleepOverlay.classList.remove("show"); }
 
@@ -1442,7 +1507,7 @@ function cancelSleepTimer() {
 function setSleepTimer(mins) {
   cancelSleepTimer();
   state.sleepEndTime = Date.now() + mins * 60000;
-  state.sleepTimer = setTimeout(() => {
+  state.sleepTimer   = setTimeout(() => {
     stopPlayback();
     armGoRest();
     cancelSleepTimer();
@@ -1463,20 +1528,25 @@ document.querySelectorAll(".sheet-opt[data-min]").forEach(b => {
     closeSleepSheet();
   });
 });
-sleepCancelBtn.addEventListener("click", () => { cancelSleepTimer(); closeSleepSheet(); showToast("Timer cancelled"); });
+sleepCancelBtn.addEventListener("click", () => {
+  cancelSleepTimer();
+  closeSleepSheet();
+  showToast("Timer cancelled");
+});
 
 
-/* ─────────────────────────────────────────────────────
-   15. PLAYBACK SPEED
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   17. PLAYBACK SPEED
+═══════════════════════════════════════════════════════════════ */
+
 function openSpeedSheet()  { speedPanel.classList.add("open"); speedOverlay.classList.add("show"); }
 function closeSpeedSheet() { speedPanel.classList.remove("open"); speedOverlay.classList.remove("show"); }
 
 function setPlaybackSpeed(spd, { silent = false, persist = true } = {}) {
-  state.playbackSpeed  = spd;
-  audio.playbackRate   = spd;
-  speedBtn.innerHTML = `
-    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+  state.playbackSpeed = spd;
+  audio.playbackRate  = spd;
+  speedBtn.innerHTML  = `
+    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
       <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
     </svg>
     ${spd === 1 ? "1×" : `${spd}×`}`;
@@ -1498,9 +1568,10 @@ document.querySelectorAll(".sheet-opt[data-speed]").forEach(b => {
 });
 
 
-/* ─────────────────────────────────────────────────────
-   16. LIKES & RECENTLY PLAYED
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   18. LIKES & RECENTLY PLAYED
+═══════════════════════════════════════════════════════════════ */
+
 function toggleLike(id) {
   state.liked.has(id) ? state.liked.delete(id) : state.liked.add(id);
 }
@@ -1513,9 +1584,10 @@ function addToRecent(id) {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   17. AUDIO EVENTS
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   19. AUDIO EVENTS
+═══════════════════════════════════════════════════════════════ */
+
 audio.addEventListener("canplay",  () => bufRing.classList.remove("spinning"));
 audio.addEventListener("waiting",  () => { if (state.isPlaying) bufRing.classList.add("spinning"); });
 audio.addEventListener("playing",  () => bufRing.classList.remove("spinning"));
@@ -1536,12 +1608,14 @@ audio.addEventListener("timeupdate", () => {
   currentTimeEl.textContent    = formatTime(audio.currentTime);
   totalTimeEl.textContent      = formatTime(audio.duration);
 
+  /* Add to recently played after 50% */
   if (!state.recentAddedForCurrent && audio.currentTime / audio.duration >= 0.5) {
     addToRecent(currentSong().id);
     state.recentAddedForCurrent = true;
     renderAll();
   }
 
+  /* Throttled state save every 5 seconds */
   const now = Date.now();
   if (now - _lastStateSave > 5000) {
     _savePlayerState();
@@ -1559,9 +1633,10 @@ audio.addEventListener("ended", () => {
 });
 
 
-/* ─────────────────────────────────────────────────────
-   18. PROGRESS BAR SCRUBBING
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   20. PROGRESS BAR SCRUBBING
+═══════════════════════════════════════════════════════════════ */
+
 let _scrubbing = false;
 
 function scrubTo(e) {
@@ -1574,7 +1649,7 @@ function scrubTo(e) {
 }
 
 function startScrub(e) {
-  _scrubbing = true;
+  _scrubbing  = true;
   audio.muted = true;
   progressTrack.classList.add("dragging");
   scrubTo(e);
@@ -1582,7 +1657,7 @@ function startScrub(e) {
 
 function endScrub() {
   if (!_scrubbing) return;
-  _scrubbing = false;
+  _scrubbing  = false;
   audio.muted = false;
   progressTrack.classList.remove("dragging");
 }
@@ -1594,22 +1669,28 @@ document.addEventListener("touchmove",  e => { if (_scrubbing) scrubTo(e); }, { 
 document.addEventListener("mouseup",    endScrub);
 document.addEventListener("touchend",   endScrub);
 
-/* ─────────────────────────────────────────────────────
-   19. CONTROLS & BUTTON EVENTS
-───────────────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════
+   21. CONTROLS & BUTTON EVENTS
+═══════════════════════════════════════════════════════════════ */
+
+/* Main controls */
 playBtn.addEventListener("click", togglePlay);
 prevBtn.addEventListener("click", prevSong);
 nextBtn.addEventListener("click", nextSong);
 
+/* Mini player controls */
 mpPlayBtn.addEventListener("click", e => { e.stopPropagation(); togglePlay(); });
 mpPrevBtn.addEventListener("click", e => { e.stopPropagation(); prevSong(); });
 mpNextBtn.addEventListener("click", e => { e.stopPropagation(); nextSong(); });
 
+/* Mini player: tap to go to player view */
 miniPlayer.addEventListener("click", e => {
   if (e.target.closest("#mpPlayBtn, #mpPrevBtn, #mpNextBtn")) return;
   switchTab("player");
 });
 
+/* Shuffle */
 shuffleBtn.addEventListener("click", () => {
   state.shuffle = !state.shuffle;
   shuffleBtn.classList.toggle("active", state.shuffle);
@@ -1617,25 +1698,29 @@ shuffleBtn.addEventListener("click", () => {
   _savePlayerState();
 });
 
+/* Repeat */
 repeatBtn.addEventListener("click", () => {
-  const idx = REPEAT_MODES.indexOf(state.repeatMode);
+  const idx      = REPEAT_MODES.indexOf(state.repeatMode);
   state.repeatMode = REPEAT_MODES[(idx + 1) % REPEAT_MODES.length];
   updateRepeatBtn();
   showToast(REPEAT_LABELS[state.repeatMode]);
   _savePlayerState();
 });
 
+/* Volume slider */
 volSlider.addEventListener("input", () => {
   state.volume = volSlider.value / 100;
   audio.volume = state.volume;
   _savePersist();
 });
 
+/* Mute toggle */
 document.getElementById("volMuteBtn").addEventListener("click", () => {
   audio.muted = !audio.muted;
   showToast(audio.muted ? "Muted" : "Unmuted");
 });
 
+/* Like button */
 playerLikeBtn.addEventListener("click", () => {
   if (!state.hasLoadedSong) { showToast("Select a song first"); return; }
   toggleLike(currentSong().id);
@@ -1646,11 +1731,13 @@ playerLikeBtn.addEventListener("click", () => {
   _savePersist();
 });
 
+/* More (…) button on player */
 playerMoreBtn.addEventListener("click", e => {
   if (!state.hasLoadedSong) { showToast("Select a song first"); return; }
   openCtxMenu(e, currentSong().id);
 });
 
+/* Queue toggle */
 queueToggleBtn.addEventListener("click", () => {
   state.queueOpen = !state.queueOpen;
   queueDrawer.classList.toggle("open", state.queueOpen);
@@ -1659,28 +1746,22 @@ queueToggleBtn.addEventListener("click", () => {
   if (state.queueOpen) renderQueue();
 });
 
+/* About panel */
 meloLogo.addEventListener("click", () => {
   aboutPanel.classList.add("active");
   aboutPanel.scrollTop = 0;
-
-  requestAnimationFrame(() => {
-    aboutPanel.classList.add("open");
-  });
+  requestAnimationFrame(() => aboutPanel.classList.add("open"));
 });
 
 function closeAboutPanel() {
   aboutPanel.classList.remove("open");
-
-  setTimeout(() => {
-    aboutPanel.classList.remove("active");
-  }, 450);
+  setTimeout(() => aboutPanel.classList.remove("active"), 450);
 }
 
 aboutClose.addEventListener("click", closeAboutPanel);
-aboutPanel.addEventListener("click", e => {
-  if (e.target === aboutPanel) closeAboutPanel();
-});
+aboutPanel.addEventListener("click", e => { if (e.target === aboutPanel) closeAboutPanel(); });
 
+/* Theme toggle */
 themeToggle.addEventListener("click", () => {
   const isDark = document.documentElement.dataset.theme === "dark";
   document.documentElement.dataset.theme = isDark ? "light" : "dark";
@@ -1703,6 +1784,7 @@ function updateThemeIcon() {
     : `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
 }
 
+/* Long press helper for mobile context menu */
 function attachLongPress(el, cb, delay = 500) {
   let timer = null;
   el.addEventListener("touchstart", () => {
@@ -1715,10 +1797,12 @@ function attachLongPress(el, cb, delay = 500) {
 }
 
 
-/* ─────────────────────────────────────────────────────
-   20. SEARCH
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   22. SEARCH
+═══════════════════════════════════════════════════════════════ */
+
 let _searchDebounce;
+
 searchInput.addEventListener("input", () => {
   const q = searchInput.value.trim();
   searchClearBtn.classList.toggle("visible", q.length > 0);
@@ -1741,8 +1825,8 @@ searchInput.addEventListener("input", () => {
 });
 
 searchClearBtn.addEventListener("click", () => {
-  searchInput.value = "";
-  state.searchQuery = "";
+  searchInput.value    = "";
+  state.searchQuery    = "";
   searchClearBtn.classList.remove("visible");
   setActiveView(`view-${state.activeTab}`);
   document.querySelectorAll(".tab-btn").forEach(b => {
@@ -1753,32 +1837,39 @@ searchClearBtn.addEventListener("click", () => {
 });
 
 
-/* ─────────────────────────────────────────────────────
-   21. KEYBOARD SHORTCUTS
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   23. KEYBOARD SHORTCUTS
+═══════════════════════════════════════════════════════════════ */
+
 document.addEventListener("keydown", e => {
   const tag = document.activeElement.tagName.toLowerCase();
   if (tag === "input" || tag === "textarea") return;
 
   switch (e.key) {
+
+    /* Play / pause */
     case " ":
     case "k":
       e.preventDefault();
       togglePlay();
       break;
 
+    /* Seek / skip */
     case "ArrowRight":
       e.preventDefault();
-      if (e.shiftKey) nextSong();
-      else audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5);
+      e.shiftKey
+        ? nextSong()
+        : (audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 5));
       break;
 
     case "ArrowLeft":
       e.preventDefault();
-      if (e.shiftKey) prevSong();
-      else audio.currentTime = Math.max(0, audio.currentTime - 5);
+      e.shiftKey
+        ? prevSong()
+        : (audio.currentTime = Math.max(0, audio.currentTime - 5));
       break;
 
+    /* Volume */
     case "ArrowUp":
       e.preventDefault();
       state.volume = Math.min(1, state.volume + 0.05);
@@ -1797,12 +1888,14 @@ document.addEventListener("keydown", e => {
       showToast(`Vol ${Math.round(state.volume * 100)}%`);
       break;
 
+    /* Mute */
     case "m":
     case "M":
       audio.muted = !audio.muted;
       showToast(audio.muted ? "Muted" : "Unmuted");
       break;
 
+    /* Like */
     case "l":
     case "L":
       if (!state.hasLoadedSong) return;
@@ -1813,6 +1906,7 @@ document.addEventListener("keydown", e => {
       showToast(state.liked.has(currentSong().id) ? "Liked" : "Unliked");
       break;
 
+    /* Shuffle */
     case "s":
     case "S":
       state.shuffle = !state.shuffle;
@@ -1821,14 +1915,16 @@ document.addEventListener("keydown", e => {
       showToast(state.shuffle ? "Shuffle On" : "Shuffle Off");
       break;
 
+    /* Focus search */
     case "f":
     case "F":
       e.preventDefault();
       searchInput.focus();
       break;
 
+    /* Close panels */
     case "Escape":
-      aboutPanel.classList.remove("open");
+      closeAboutPanel();
       closeSleepSheet();
       closeSpeedSheet();
       closePlaylistSheet();
@@ -1838,15 +1934,16 @@ document.addEventListener("keydown", e => {
 });
 
 
-/* ─────────────────────────────────────────────────────
-   22. INITIALISATION
-───────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   24. INITIALISATION
+═══════════════════════════════════════════════════════════════ */
+
 function preloadDurations() {
   SONGS.forEach(song => {
     if (song._duration) return;
     const probe = new Audio();
     probe.preload = "metadata";
-    probe.src = song.src;
+    probe.src     = song.src;
     probe.addEventListener("loadedmetadata", () => {
       song._duration = formatTime(probe.duration);
       document.querySelectorAll(`.song-item[data-id="${song.id}"] .si-dur`).forEach(el => {
@@ -1878,6 +1975,7 @@ function init() {
   updatePlaybackContextLabel();
   updateRepeatBtn();
 
+  /* Show arm hint after 1 second if not playing */
   setTimeout(() => {
     if (!state.isPlaying) {
       showArmHint(true);
@@ -1885,6 +1983,7 @@ function init() {
     }
   }, 1000);
 
+  /* Preload durations slightly delayed to not block initial render */
   setTimeout(preloadDurations, 900);
 }
 
