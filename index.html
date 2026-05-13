@@ -6,145 +6,213 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Melo — Retro Player</title>
+
+  <!-- ══ FONTS ══ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 <div id="app">
   <div class="frame no-select">
 
-    <!-- ══ TOPBAR ══════════════════════════════════════ -->
-    <div class="topbar">
+    <!-- ══════════════════════════════════════════════
+         TOPBAR
+    ══════════════════════════════════════════════ -->
+    <header class="topbar">
       <div class="logo" id="meloLogo" title="About Melo">
         <div class="logo-record">
+          <div class="logo-record-grooves"></div>
           <div class="logo-record-center"></div>
         </div>
         <span class="logo-word">M<em>elo</em></span>
       </div>
+
       <div class="topbar-right">
         <button class="icon-btn" id="sleepTimerBtn" title="Sleep Timer" aria-label="Sleep Timer">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
         </button>
         <button class="icon-btn" id="themeToggle" title="Toggle Theme" aria-label="Toggle Theme">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="themeIcon">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
         </button>
       </div>
-    </div>
+    </header>
 
-    <!-- ══ SEARCH ═══════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════
+         SEARCH
+    ══════════════════════════════════════════════ -->
     <div class="search-wrap">
       <div class="search-inner">
-        <svg class="search-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg class="search-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
         <input type="text" id="searchInput" placeholder="Search songs, artists…" autocomplete="off" aria-label="Search songs and artists">
         <button class="search-clear" id="searchClearBtn" aria-label="Clear search">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
         </button>
       </div>
     </div>
 
-    <!-- ══ TABS ══════════════════════════════════════════ -->
-    <div class="tab-nav" id="tabNav" role="tablist"></div>
+    <!-- ══════════════════════════════════════════════
+         TABS
+    ══════════════════════════════════════════════ -->
+    <nav class="tab-nav" id="tabNav" role="tablist"></nav>
 
-    <!-- ══ SCREEN ════════════════════════════════════════ -->
-    <div class="screen">
+    <!-- ══════════════════════════════════════════════
+         SCREEN
+    ══════════════════════════════════════════════ -->
+    <main class="screen">
 
-      <!-- ─ PLAYER VIEW ─────────────────────────────── -->
+      <!-- ─────────────────────────────────────────
+           VIEW: PLAYER
+      ───────────────────────────────────────── -->
       <div class="view active" id="view-player" role="tabpanel">
 
-        <!-- Turntable -->
+        <!-- Turntable Stage -->
         <div class="turntable" id="turntableStage">
+
           <!-- Platter -->
           <div class="platter-base">
             <div class="platter-ring r1"></div>
             <div class="platter-ring r2"></div>
             <div class="platter-ring r3"></div>
+            <div class="platter-ring r4"></div>
             <div class="platter-felt"></div>
           </div>
+
+          <!-- Pixel corner screws -->
+          <div class="platter-screw s1"></div>
+          <div class="platter-screw s2"></div>
+          <div class="platter-screw s3"></div>
+          <div class="platter-screw s4"></div>
+
           <!-- Vinyl -->
           <div class="vinyl-wrap" id="vinylWrap">
             <div class="vinyl-glow" id="vinylGlow"></div>
             <div class="vinyl-disk" id="vinylDisk">
               <div class="vinyl-grooves"></div>
+              <div class="vinyl-grooves-fine"></div>
               <div class="vinyl-sheen"></div>
               <div class="vinyl-label" id="vinylLabel">
                 <img id="vinylArt" src="images/default.png" alt="Album art">
                 <div class="label-ring"></div>
+                <div class="label-dot"></div>
               </div>
               <div class="vinyl-spindle"></div>
             </div>
           </div>
 
-          <!-- ══ S-CURVE TONEARM (SVG-based) ══ -->
+          <!-- S-Curve Tonearm -->
           <div class="arm-pivot" id="armPivot">
             <div class="pivot-base"></div>
+            <div class="pivot-ring"></div>
             <div class="pivot-knob"></div>
             <div class="tonearm" id="tonearm">
               <svg class="arm-svg" id="armSvg" viewBox="0 0 32 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="9" y="0" width="14" height="22" rx="4"
-                      fill="url(#cwGrad)" stroke="rgba(232,160,32,0.25)" stroke-width="0.8"/>
+                <!-- Counterweight body -->
+                <rect x="9" y="0" width="14" height="22" rx="3"
+                      fill="url(#cwGrad)" stroke="rgba(180,160,130,0.20)" stroke-width="0.8"/>
+                <!-- Counterweight detail lines -->
+                <line x1="10" y1="7" x2="22" y2="7" stroke="rgba(180,160,130,0.15)" stroke-width="0.5"/>
+                <line x1="10" y1="11" x2="22" y2="11" stroke="rgba(180,160,130,0.10)" stroke-width="0.5"/>
+                <line x1="10" y1="15" x2="22" y2="15" stroke="rgba(180,160,130,0.10)" stroke-width="0.5"/>
+                <!-- Collar -->
                 <rect x="12" y="20" width="8" height="5" rx="2"
-                      fill="url(#collarGrad)" stroke="rgba(232,160,32,0.18)" stroke-width="0.6"/>
+                      fill="url(#collarGrad)" stroke="rgba(180,160,130,0.15)" stroke-width="0.6"/>
+                <!-- S-curve arm tube -->
                 <path id="armPath"
                       d="M16,25 C16,40 22,52 22,70 C22,88 10,100 10,118 C10,130 14,138 16,148"
-                      stroke="url(#armGrad)" stroke-width="3.5" stroke-linecap="round"
+                      stroke="url(#armGrad)" stroke-width="3.2" stroke-linecap="round"
                       fill="none" filter="url(#armShadow)"/>
+                <!-- Highlight on arm -->
                 <path d="M17,26 C17,40 22.5,52 22.5,70 C22.5,87 10.5,99 10.5,118"
-                      stroke="rgba(255,255,255,0.10)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-                <rect x="9" y="146" width="14" height="8" rx="3"
-                      fill="url(#headGrad)" stroke="rgba(232,160,32,0.20)" stroke-width="0.7"/>
-                <rect x="10.5" y="152" width="11" height="5" rx="2"
-                      fill="url(#cartGrad)" stroke="rgba(232,160,32,0.12)" stroke-width="0.5"/>
+                      stroke="rgba(255,255,255,0.07)" stroke-width="1.0" stroke-linecap="round" fill="none"/>
+                <!-- Headshell -->
+                <rect x="9" y="146" width="14" height="8" rx="2"
+                      fill="url(#headGrad)" stroke="rgba(180,160,130,0.18)" stroke-width="0.7"/>
+                <!-- Cartridge -->
+                <rect x="10.5" y="152" width="11" height="5" rx="1.5"
+                      fill="url(#cartGrad)" stroke="rgba(180,160,130,0.10)" stroke-width="0.5"/>
+                <!-- Pixel detail on cartridge -->
+                <rect x="11.5" y="153" width="2" height="2" fill="rgba(180,160,130,0.20)"/>
+                <rect x="14.5" y="153" width="2" height="2" fill="rgba(180,160,130,0.15)"/>
+                <!-- Needle -->
                 <line id="needleLine" x1="16" y1="157" x2="16" y2="164"
-                      stroke="#6A5A38" stroke-width="1.4" stroke-linecap="round"/>
+                      stroke="rgba(120,110,90,0.7)" stroke-width="1.2" stroke-linecap="round"/>
 
                 <defs>
                   <linearGradient id="cwGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#2E2820"/>
-                    <stop offset="40%" stop-color="#4A4030"/>
+                    <stop offset="0%"   stop-color="#2A2520"/>
+                    <stop offset="45%"  stop-color="#3E3830"/>
                     <stop offset="100%" stop-color="#1A1610"/>
                   </linearGradient>
                   <linearGradient id="collarGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#222018"/>
-                    <stop offset="50%" stop-color="#3A3428"/>
-                    <stop offset="100%" stop-color="#181410"/>
+                    <stop offset="0%"   stop-color="#201E18"/>
+                    <stop offset="50%"  stop-color="#342E26"/>
+                    <stop offset="100%" stop-color="#161410"/>
                   </linearGradient>
                   <linearGradient id="armGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#1A1610"/>
-                    <stop offset="35%" stop-color="#E8A020" stop-opacity="0.55"/>
-                    <stop offset="65%" stop-color="#C09030" stop-opacity="0.40"/>
-                    <stop offset="100%" stop-color="#141008"/>
+                    <stop offset="0%"   stop-color="#161210"/>
+                    <stop offset="35%"  stop-color="var(--accent-raw)" stop-opacity="0.50"/>
+                    <stop offset="65%"  stop-color="var(--accent-raw)" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#100E08"/>
                   </linearGradient>
                   <linearGradient id="headGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#262018"/>
-                    <stop offset="50%" stop-color="#3C3428"/>
-                    <stop offset="100%" stop-color="#1C1810"/>
+                    <stop offset="0%"   stop-color="#222018"/>
+                    <stop offset="50%"  stop-color="#343028"/>
+                    <stop offset="100%" stop-color="#181610"/>
                   </linearGradient>
                   <linearGradient id="cartGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#1A1610"/>
-                    <stop offset="50%" stop-color="#2E2820"/>
-                    <stop offset="100%" stop-color="#141008"/>
+                    <stop offset="0%"   stop-color="#181410"/>
+                    <stop offset="50%"  stop-color="#28241C"/>
+                    <stop offset="100%" stop-color="#120E08"/>
                   </linearGradient>
                   <filter id="armShadow" x="-50%" y="-10%" width="200%" height="120%">
-                    <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.7)"/>
+                    <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="rgba(0,0,0,0.6)"/>
                   </filter>
                 </defs>
               </svg>
             </div>
           </div>
 
-          <!-- Buffering indicator -->
+          <!-- Buffering ring -->
           <div class="buf-ring" id="bufRing"></div>
-          <!-- Arm hint -->
+
+          <!-- Arm drag hint -->
           <div class="arm-hint" id="armHint">
-            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
             drag arm to play
           </div>
-          <div class="platter-rpm">33⅓ RPM</div>
-        </div>
 
-        <!-- Song info -->
+          <!-- RPM badge -->
+          <div class="platter-rpm">33⅓ RPM</div>
+
+        </div>
+        <!-- /turntable -->
+
+        <!-- Song Info -->
         <div class="song-meta">
           <div class="meta-title-wrap">
             <div class="meta-title" id="songTitle">Select a Song</div>
@@ -156,22 +224,30 @@
           </div>
         </div>
 
-        <!-- Action row -->
+        <!-- Action Row -->
         <div class="action-row">
           <button class="like-btn" id="playerLikeBtn" title="Like" aria-label="Like song">
             <div class="burst"></div>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
           </button>
           <button class="pill-btn" id="speedBtn" title="Playback Speed" aria-label="Playback speed">
-            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
             1×
           </button>
           <button class="more-btn" id="playerMoreBtn" title="More options" aria-label="More options">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="5" r="1.2"/>
+              <circle cx="12" cy="12" r="1.2"/>
+              <circle cx="12" cy="19" r="1.2"/>
+            </svg>
           </button>
         </div>
 
-        <!-- Progress bar -->
+        <!-- Progress Bar -->
         <div class="progress-wrap">
           <div class="progress-track" id="progressTrack">
             <div class="progress-bg"></div>
@@ -185,45 +261,75 @@
           </div>
         </div>
 
-        <!-- Playback controls -->
+        <!-- Playback Controls -->
         <div class="controls">
           <button class="ctrl-btn ctrl-mode" id="shuffleBtn" title="Shuffle" aria-label="Shuffle" aria-pressed="false">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 3 21 3 21 8"/>
+              <line x1="4" y1="20" x2="21" y2="3"/>
+              <polyline points="21 16 21 21 16 21"/>
+              <line x1="15" y1="15" x2="21" y2="21"/>
+            </svg>
           </button>
           <button class="ctrl-btn ctrl-skip" id="prevBtn" title="Previous" aria-label="Previous track">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+            </svg>
           </button>
           <button class="ctrl-btn play-btn" id="playBtn" title="Play/Pause" aria-label="Play or pause">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" id="playIcon">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
           </button>
           <button class="ctrl-btn ctrl-skip" id="nextBtn" title="Next" aria-label="Next track">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z"/>
+            </svg>
           </button>
           <button class="ctrl-btn ctrl-mode" id="repeatBtn" title="Repeat" aria-label="Repeat" aria-pressed="false">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="repeatIcon"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="repeatIcon">
+              <polyline points="17 1 21 5 17 9"/>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+              <polyline points="7 23 3 19 7 15"/>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+            </svg>
           </button>
         </div>
 
         <!-- Volume -->
         <div class="vol-row">
           <button class="vol-mute-btn" id="volMuteBtn" aria-label="Toggle mute">
-            <svg class="vol-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="volIcon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+            <svg class="vol-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="volIcon">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            </svg>
           </button>
           <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80" aria-label="Volume">
-          <svg class="vol-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <svg class="vol-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
         </div>
 
-        <!-- Queue -->
+        <!-- Queue Toggle -->
         <button class="queue-toggle" id="queueToggleBtn" aria-expanded="false">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="queue-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="queue-chevron">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
           Up Next
         </button>
+
+        <!-- Queue Drawer -->
         <div class="queue-drawer" id="queueDrawer" aria-hidden="true">
           <div class="queue-inner" id="queueInner"></div>
         </div>
-      </div>
 
-      <!-- ─ SONGS VIEW ───────────────────────────────── -->
+      </div>
+      <!-- /view-player -->
+
+      <!-- ─────────────────────────────────────────
+           VIEW: SONGS
+      ───────────────────────────────────────── -->
       <div class="view" id="view-songs" role="tabpanel">
         <div class="list-hdr">
           <div class="list-ttl">All Songs</div>
@@ -232,7 +338,9 @@
         <div class="song-list" id="songList"></div>
       </div>
 
-      <!-- ─ LIKED VIEW ───────────────────────────────── -->
+      <!-- ─────────────────────────────────────────
+           VIEW: LIKED
+      ───────────────────────────────────────── -->
       <div class="view" id="view-liked" role="tabpanel">
         <div class="list-hdr">
           <div class="list-ttl">Liked Songs</div>
@@ -241,7 +349,9 @@
         <div class="song-list" id="likedList"></div>
       </div>
 
-      <!-- ─ RECENT VIEW ──────────────────────────────── -->
+      <!-- ─────────────────────────────────────────
+           VIEW: RECENT
+      ───────────────────────────────────────── -->
       <div class="view" id="view-recent" role="tabpanel">
         <div class="list-hdr">
           <div class="list-ttl">Recently Played</div>
@@ -250,12 +360,16 @@
         <div class="song-list" id="recentList"></div>
       </div>
 
-      <!-- ─ SEARCH VIEW ──────────────────────────────── -->
+      <!-- ─────────────────────────────────────────
+           VIEW: SEARCH
+      ───────────────────────────────────────── -->
       <div class="view" id="view-search" role="tabpanel">
         <div class="song-list" id="searchResultsList"></div>
       </div>
 
-      <!-- ─ PLAYLIST VIEW ────────────────────────────── -->
+      <!-- ─────────────────────────────────────────
+           VIEW: PLAYLISTS
+      ───────────────────────────────────────── -->
       <div class="view" id="view-playlist" role="tabpanel">
         <div class="list-hdr">
           <div class="list-ttl">Playlists</div>
@@ -268,7 +382,10 @@
             <div class="playlist-create-row">
               <input type="text" id="playlistNameInput" class="pl-input" placeholder="Playlist name…" maxlength="40">
               <button class="pl-primary-btn" id="createPlaylistBtn">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
                 Create
               </button>
             </div>
@@ -278,9 +395,12 @@
         </div>
       </div>
 
-    </div><!-- /screen -->
+    </main>
+    <!-- /screen -->
 
-    <!-- ══ MINI PLAYER ═══════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════
+         MINI PLAYER
+    ══════════════════════════════════════════════ -->
     <div class="mini-player" id="miniPlayer" role="region" aria-label="Mini player">
       <div class="mini-main">
         <div class="mini-thumb">
@@ -291,195 +411,206 @@
           <div class="mini-artist" id="mpArtist">—</div>
         </div>
         <div class="mini-ctrls">
-          <button class="mp-btn" id="mpPrevBtn" aria-label="Previous"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
-          <button class="mp-btn mp-play" id="mpPlayBtn" aria-label="Play or pause"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" id="mpIcon"><path d="M8 5v14l11-7z"/></svg></button>
-          <button class="mp-btn" id="mpNextBtn" aria-label="Next"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z"/></svg></button>
+          <button class="mp-btn" id="mpPrevBtn" aria-label="Previous">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+          </button>
+          <button class="mp-btn mp-play" id="mpPlayBtn" aria-label="Play or pause">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" id="mpIcon"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <button class="mp-btn" id="mpNextBtn" aria-label="Next">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z"/></svg>
+          </button>
         </div>
       </div>
       <div class="mini-prog"><div class="mini-prog-fill" id="miniProgressFill" style="width:0%"></div></div>
     </div>
 
-    <!-- ══ KBD HINT ═══════════════════════════════════════ -->
+    <!-- Keyboard hint -->
     <div class="kbd-hint">Space · ←→ seek · Shift+←→ skip · ↑↓ vol · L like · M mute · F search</div>
 
-    <!-- About Panel -->
-<div class="about-panel" id="aboutPanel" role="dialog" aria-label="About Melo">
-  <div class="about-inner">
+    <!-- ══════════════════════════════════════════════
+         ABOUT PANEL
+    ══════════════════════════════════════════════ -->
+    <div class="about-panel" id="aboutPanel" role="dialog" aria-label="About Melo">
+      <div class="about-inner">
 
-    <button class="about-close" id="aboutClose" aria-label="Close about panel">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-
-    <div class="about-hero">
-      <div class="about-logo-big">M<em>elo</em></div>
-      <div class="about-ver">Version 2.2.0</div>
-      <p class="about-tagline">Not built for skipping.</p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">About the App</div>
-      <p class="about-txt">
-        Melo is designed around presence. Instead of fast taps and endless skipping,
-        it brings back the physical rhythm of listening — drop the needle, let it play,
-        and stay with the track.
-      </p>
-      <p class="about-txt">
-        Most music players optimise for speed. Melo does the opposite — it slows things down,
-        removes noise, and makes listening feel intentional again.
-      </p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">Why Melo exists</div>
-      <p class="about-txt">
-        Modern music apps are built for speed — search, skip, repeat.
-        That makes music feel disposable.
-      </p>
-      <p class="about-txt">
-        Melo focuses on the opposite idea: stay with the song, not the algorithm.
-      </p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">What makes it different</div>
-      <p class="about-txt">
-        Melo isn't just visual — it's interactive. You don't just press play,
-        you drop the tonearm. The vinyl spins. Playback feels like an action,
-        not a button press.
-      </p>
-    </div>
-
-    <div class="about-divider"></div>
-
-    <div class="about-sec">
-      <div class="about-sec-label">Built By</div>
-      <div class="about-dev">
-        <div class="about-dev-av">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <polyline points="16 18 22 12 16 6"/>
-            <polyline points="8 6 2 12 8 18"/>
+        <button class="about-close" id="aboutClose" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
+        </button>
+
+        <div class="about-hero">
+          <div class="about-logo-big">M<em>elo</em></div>
+          <div class="about-ver">Version 2.2.0</div>
+          <p class="about-tagline">Not built for skipping.</p>
         </div>
-        <div>
-          <div class="about-dev-name">rootnikhil</div>
-          <div class="about-dev-bio">
-            Focused on clean UI, interaction design, and building things from scratch without heavy frameworks.
+
+        <div class="about-divider"></div>
+
+        <div class="about-sec">
+          <div class="about-sec-label">About the App</div>
+          <p class="about-txt">Melo is designed around presence. Instead of fast taps and endless skipping, it brings back the physical rhythm of listening — drop the needle, let it play, and stay with the track.</p>
+          <p class="about-txt">Most music players optimise for speed. Melo does the opposite — it slows things down, removes noise, and makes listening feel intentional again.</p>
+        </div>
+
+        <div class="about-divider"></div>
+
+        <div class="about-sec">
+          <div class="about-sec-label">Why Melo exists</div>
+          <p class="about-txt">Modern music apps are built for speed — search, skip, repeat. That makes music feel disposable.</p>
+          <p class="about-txt">Melo focuses on the opposite idea: stay with the song, not the algorithm.</p>
+        </div>
+
+        <div class="about-divider"></div>
+
+        <div class="about-sec">
+          <div class="about-sec-label">What makes it different</div>
+          <p class="about-txt">Melo isn't just visual — it's interactive. You don't just press play, you drop the tonearm. The vinyl spins. Playback feels like an action, not a button press.</p>
+        </div>
+
+        <div class="about-divider"></div>
+
+        <div class="about-sec">
+          <div class="about-sec-label">Built By</div>
+          <div class="about-dev">
+            <div class="about-dev-av">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <div>
+              <div class="about-dev-name">rootnikhil</div>
+              <div class="about-dev-bio">Focused on clean UI, interaction design, and building things from scratch without heavy frameworks.</div>
+            </div>
+          </div>
+          <div class="about-tags">
+            <span class="about-tag-pill">HTML5</span>
+            <span class="about-tag-pill">CSS3</span>
+            <span class="about-tag-pill">Vanilla JS</span>
+            <span class="about-tag-pill">Web Audio</span>
+            <span class="about-tag-pill">LocalStorage</span>
           </div>
         </div>
+
+        <div class="about-divider"></div>
+
+        <div class="about-footer">
+          <div>© <span id="aboutYear"></span> Melo</div>
+          <div>Built for listening, not skipping.</div>
+        </div>
+
       </div>
+    </div>
 
-      <div class="about-tags">
-        <span class="about-tag-pill">HTML5</span>
-        <span class="about-tag-pill">CSS3</span>
-        <span class="about-tag-pill">Vanilla JS</span>
-        <span class="about-tag-pill">Web Audio</span>
-        <span class="about-tag-pill">LocalStorage</span>
+    <!-- ══════════════════════════════════════════════
+         OVERLAYS & BOTTOM SHEETS
+    ══════════════════════════════════════════════ -->
+
+    <!-- Sleep Timer -->
+    <div class="sheet-overlay" id="sleepOverlay"></div>
+    <div class="bottom-sheet" id="sleepPanel" role="dialog" aria-label="Sleep Timer">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Sleep Timer
+      </div>
+      <div class="sleep-cd" id="sleepCountdown"></div>
+      <div class="sheet-grid">
+        <button class="sheet-opt" data-min="5">5 min</button>
+        <button class="sheet-opt" data-min="10">10 min</button>
+        <button class="sheet-opt" data-min="15">15 min</button>
+        <button class="sheet-opt" data-min="30">30 min</button>
+        <button class="sheet-opt" data-min="45">45 min</button>
+        <button class="sheet-opt" data-min="60">1 hour</button>
+      </div>
+      <button class="sheet-cancel" id="sleepCancelBtn">Cancel Timer</button>
+    </div>
+
+    <!-- Playback Speed -->
+    <div class="sheet-overlay" id="speedOverlay"></div>
+    <div class="bottom-sheet" id="speedPanel" role="dialog" aria-label="Playback Speed">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+        Playback Speed
+      </div>
+      <div class="sheet-grid">
+        <button class="sheet-opt" data-speed="0.5">0.5×</button>
+        <button class="sheet-opt" data-speed="0.75">0.75×</button>
+        <button class="sheet-opt sheet-opt-active" data-speed="1">Normal</button>
+        <button class="sheet-opt" data-speed="1.25">1.25×</button>
+        <button class="sheet-opt" data-speed="1.5">1.5×</button>
+        <button class="sheet-opt" data-speed="2">2×</button>
       </div>
     </div>
 
-    <div class="about-divider"></div>
-
-    <div class="about-footer">
-      <div>© <span id="aboutYear"></span> Melo</div>
-      <div>Built for listening, not skipping.</div>
+    <!-- Add to Playlist -->
+    <div class="sheet-overlay" id="playlistOverlay"></div>
+    <div class="bottom-sheet" id="playlistPanel" role="dialog" aria-label="Add to Playlist">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M9 18V5l12-2v13"/>
+          <circle cx="6" cy="18" r="3"/>
+          <circle cx="18" cy="16" r="3"/>
+        </svg>
+        Add To Playlist
+      </div>
+      <p class="sheet-helper" id="playlistSheetHelper">Choose a playlist for this song.</p>
+      <div class="pl-sheet-list" id="playlistSheetList"></div>
     </div>
 
-  </div>
-</div>
-
-<!-- ══ OVERLAYS & SHEETS ═══════════════════════════════════ -->
-
-<!-- Sleep Timer Sheet -->
-<div class="sheet-overlay" id="sleepOverlay"></div>
-<div class="bottom-sheet" id="sleepPanel" role="dialog" aria-label="Sleep Timer">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    Sleep Timer
-  </div>
-  <div class="sleep-cd" id="sleepCountdown"></div>
-  <div class="sheet-grid">
-    <button class="sheet-opt" data-min="5">5 min</button>
-    <button class="sheet-opt" data-min="10">10 min</button>
-    <button class="sheet-opt" data-min="15">15 min</button>
-    <button class="sheet-opt" data-min="30">30 min</button>
-    <button class="sheet-opt" data-min="45">45 min</button>
-    <button class="sheet-opt" data-min="60">1 hour</button>
-  </div>
-  <button class="sheet-cancel" id="sleepCancelBtn">Cancel Timer</button>
-</div>
-
-<!-- Speed Sheet -->
-<div class="sheet-overlay" id="speedOverlay"></div>
-<div class="bottom-sheet" id="speedPanel" role="dialog" aria-label="Playback Speed">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-    Playback Speed
-  </div>
-  <div class="sheet-grid">
-    <button class="sheet-opt" data-speed="0.5">0.5×</button>
-    <button class="sheet-opt" data-speed="0.75">0.75×</button>
-    <button class="sheet-opt sheet-opt-active" data-speed="1">Normal</button>
-    <button class="sheet-opt" data-speed="1.25">1.25×</button>
-    <button class="sheet-opt" data-speed="1.5">1.5×</button>
-    <button class="sheet-opt" data-speed="2">2×</button>
-  </div>
-</div>
-
-<!-- Add to Playlist Sheet -->
-<div class="sheet-overlay" id="playlistOverlay"></div>
-<div class="bottom-sheet" id="playlistPanel" role="dialog" aria-label="Add to Playlist">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-    Add To Playlist
-  </div>
-  <p class="sheet-helper" id="playlistSheetHelper">Choose a playlist for this song.</p>
-  <div class="pl-sheet-list" id="playlistSheetList"></div>
-</div>
-
-<!-- Sleep Notice -->
-<div class="center-notice" id="sleepNotice" role="alert">
-  <div class="notice-card">
-    <div class="notice-icon">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <!-- Sleep Notice -->
+    <div class="center-notice" id="sleepNotice" role="alert">
+      <div class="notice-card">
+        <div class="notice-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </div>
+        <div class="notice-title">Sleep Timer Done</div>
+        <div class="notice-text" id="sleepNoticeText">Good night. Music has stopped.</div>
+      </div>
     </div>
-    <div class="notice-title">Sleep Timer Done</div>
-    <div class="notice-text" id="sleepNoticeText">Good night. Music has stopped.</div>
+
+    <!-- Context Menu -->
+    <div class="ctx-menu" id="ctxMenu" role="menu">
+      <div class="ctx-item" id="ctxPlayNext" role="menuitem">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z"/></svg>
+        Play Next
+      </div>
+      <div class="ctx-item" id="ctxAddToPlaylist" role="menuitem">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/>
+        </svg>
+        Add to Playlist
+      </div>
+      <div class="ctx-item" id="ctxDownload" role="menuitem">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Audio element -->
+    <audio id="audioPlayer" preload="metadata"></audio>
+
   </div>
 </div>
-
-<!-- Context Menu -->
-<div class="ctx-menu" id="ctxMenu" role="menu">
-  <div class="ctx-item" id="ctxPlayNext" role="menuitem">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zm-1.5 6L6 18V6l8.5 6z"/></svg>
-    Play Next
-  </div>
-  <div class="ctx-item" id="ctxAddToPlaylist" role="menuitem">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/></svg>
-    Add to Playlist
-  </div>
-  <div class="ctx-item" id="ctxDownload" role="menuitem">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    Download
-  </div>
-</div>
-
-<!-- Toast -->
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<!-- Audio element -->
-<audio id="audioPlayer" preload="metadata"></audio>
 
 <script src="script.js"></script>
 </body>
