@@ -11,7 +11,7 @@
 
 **A retro music player that brings back the ritual of listening.**
 
-[![Version](https://img.shields.io/badge/version-3.0.0-E8B84B?style=flat-square&labelColor=0C0F16&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9IiNFOEI4NEIiLz48L3N2Zz4=)](https://github.com/rootnikhil/melo)
+[![Version](https://img.shields.io/badge/version-2.2.0-E8B84B?style=flat-square&labelColor=0C0F16&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9IiNFOEI4NEIiLz48L3N2Zz4=)](https://github.com/rootnikhil/melo)
 [![HTML5](https://img.shields.io/badge/HTML5-pure-4F8EF7?style=flat-square&labelColor=0C0F16)](https://github.com/rootnikhil/melo)
 [![CSS3](https://img.shields.io/badge/CSS3-pure-4F8EF7?style=flat-square&labelColor=0C0F16)](https://github.com/rootnikhil/melo)
 [![Vanilla JS](https://img.shields.io/badge/JavaScript-vanilla-4F8EF7?style=flat-square&labelColor=0C0F16)](https://github.com/rootnikhil/melo)
